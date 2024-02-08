@@ -1,7 +1,9 @@
-package org.nsu.oop.task2;
+package org.nsu.oop.task2.exceptions;
+
+import org.nsu.oop.task2.instructions.Instruction;
 
 public class BadArithmeticException extends InstructionException {
-    public BadArithmeticException(Instruction instruction, ArithmeticException exception) {
-        
+    public BadArithmeticException(String message, Instruction instruction) {
+        super("arithmetic error: " + message, instruction);
     }
 }

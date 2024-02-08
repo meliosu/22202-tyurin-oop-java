@@ -1,2 +1,9 @@
-package org.nsu.oop.task2;public class Calculator {
+package org.nsu.oop.task2;
+
+import org.nsu.oop.task2.exceptions.InstructionFactoryException;
+
+public class Calculator {
+    private Context context;
+    private InstructionFactory factory;
+
 }

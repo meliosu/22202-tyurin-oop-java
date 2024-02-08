@@ -1,7 +1,7 @@
-package org.nsu.oop.task2;
+package org.nsu.oop.task2.exceptions;
 
 public class CalculatorException extends RuntimeException {
-    CalculatorException(String message) {
+    public CalculatorException(String message) {
         super(message);
     }
 }
