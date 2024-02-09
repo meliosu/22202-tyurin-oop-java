@@ -1,26 +1,17 @@
 package org.nsu.oop.task1.io;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class ConsoleInput implements Input {
-    BufferedReader reader;
+    Scanner scanner;
 
     public ConsoleInput() {
-        InputStreamReader streamReader = new InputStreamReader(System.in);
-        reader = new BufferedReader(streamReader);
+        scanner = new Scanner(System.in);
     }
 
 
     @Override
     public String getInput() {
-        try {
-            return reader.readLine();
-        } catch (IOException exception) {
-            System.out.println("looooooooool");
-        }
-
-        return "";
+        return scanner.nextLine();
     }
 }

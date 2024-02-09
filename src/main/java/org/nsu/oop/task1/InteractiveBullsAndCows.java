@@ -5,7 +5,6 @@ import org.nsu.oop.task1.io.IOStream;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.Vector;
 
 public class InteractiveBullsAndCows {
     private IOStream ioStream;
@@ -24,7 +23,7 @@ public class InteractiveBullsAndCows {
             try {
                 guess = getGuess();
             } catch (RuntimeException exception) {
-                System.out.println(invalidGuessMessage());
+                ioStream.send(invalidGuessMessage());
                 continue;
             }
 
@@ -32,17 +31,29 @@ public class InteractiveBullsAndCows {
             int numberBulls = countBulls(guess);
 
             if (numberBulls == gameConfig.getSequenceLen()) {
-                System.out.println(winMessage());
+                ioStream.send(winMessage());
                 break;
-            } else {
-                System.out.println(guessResponseMessage(numberCows, numberBulls));
             }
+
+            ioStream.send(guessResponseMessage(numberCows, numberBulls));
         }
     }
 
-    private int[] getGuess() {
+    private int[] getGuess() throws RuntimeException {
         String userInput = ioStream.receive();
+        char[] guessChars = userInput.toCharArray();
+        int secretNumberLen = gameConfig.getSequenceLen();
+        if (guessChars.length != secretNumberLen) {
+            throw new RuntimeException();
+        }
 
+        int[] currentGuess = new int[secretNumberLen];
+        for (int i = 0; i < secretNumberLen; i++) {
+            int d = Character.getNumericValue(guessChars[i]);
+            currentGuess[i] = d;
+        }
+
+        return currentGuess;
     }
 
     private String invalidGuessMessage() {
@@ -50,16 +61,7 @@ public class InteractiveBullsAndCows {
     }
 
     private String guessResponseMessage(int numberCows, int numberBulls) {
-        String message = "";
-        if (numberCows != 0) {
-            message += numberCows + " cows";
-        }
-
-        if (numberBulls != 0) {
-            message += ", " + numberBulls + "bulls";
-        }
-
-        return message;
+        return String.format("cows: %d, bulls: %d", numberCows, numberBulls);
     }
 
     private String winMessage() {
@@ -68,8 +70,8 @@ public class InteractiveBullsAndCows {
 
     private int[] generateSecretNumber() {
         int numberLen = gameConfig.getSequenceLen();
-        int[] digitArray = new int[gameConfig.getSequenceLen()];
-        Set<Integer> digitSet = new HashSet<Integer>();
+        int[] digitArray = new int[numberLen];
+        Set<Integer> digitSet = new HashSet<>();
 
         Random random = new Random();
         for (int i = 0; i < numberLen; i++) {
