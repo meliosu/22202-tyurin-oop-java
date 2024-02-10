@@ -6,7 +6,6 @@ import java.util.Set;
 
 public class VirtualOpponent implements Opponent {
     private int[] secretDigits;
-    private int[] currentGuess;
     private boolean hasLost = false;
 
     @Override
@@ -20,21 +19,16 @@ public class VirtualOpponent implements Opponent {
     }
 
     @Override
-    public String receiveGuessResponse() {
-        int numberCows = countCows(currentGuess, secretDigits);
-        int numberBulls = countBulls(currentGuess, secretDigits);
+    public String receiveGuessResponse(int[] guess) {
+        int numberCows = countCows(guess, secretDigits);
+        int numberBulls = countBulls(guess, secretDigits);
 
-        if (numberBulls == currentGuess.length) {
+        if (numberBulls == guess.length) {
             hasLost = true;
             return winMessage();
         } else {
             return guessResponseMessage(numberCows, numberBulls);
         }
-    }
-
-    @Override
-    public void sendGuess(int[] guess) {
-        currentGuess = guess;
     }
 
     public int[] generateSecretNumber(int numberLen) {

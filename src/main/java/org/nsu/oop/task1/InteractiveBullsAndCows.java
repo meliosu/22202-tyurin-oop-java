@@ -24,9 +24,7 @@ public class InteractiveBullsAndCows {
                 continue;
             }
 
-            gameOpponent.sendGuess(guess);
-
-            String response = gameOpponent.receiveGuessResponse();
+            String response = gameOpponent.receiveGuessResponse(guess);
             ioStream.send(response);
         }
     }
