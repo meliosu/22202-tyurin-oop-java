@@ -31,6 +31,11 @@ public class VirtualOpponent implements Opponent {
         }
     }
 
+    @Override
+    public String greetingMessage() {
+        return "Welcome to a game of Bulls And Cows. Please enter your guess...";
+    }
+
     public int[] generateSecretNumber(int numberLen) {
         int[] digits = new int[numberLen];
         Set<Integer> digitSet = new HashSet<>();
