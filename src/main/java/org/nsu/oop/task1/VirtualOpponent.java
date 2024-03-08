@@ -19,21 +19,21 @@ public class VirtualOpponent implements Opponent {
     }
 
     @Override
-    public String receiveGuessResponse(int[] guess) {
-        int numberCows = countCows(guess, secretDigits);
-        int numberBulls = countBulls(guess, secretDigits);
+    public GuessResponse receiveGuessResponse(int[] guess) {
+        int numberCows = countCows(guess);
+        int numberBulls = countBulls(guess);
 
         if (numberBulls == guess.length) {
             hasLost = true;
-            return winMessage();
-        } else {
-            return guessResponseMessage(numberCows, numberBulls);
         }
+
+        return new GuessResponse(numberCows, numberBulls);
     }
 
-    @Override
-    public String greetingMessage() {
-        return "Welcome to a game of Bulls And Cows. Please enter your guess...";
+    public static VirtualOpponent withSecretSequence(int[] sequence) {
+        VirtualOpponent opponent = new VirtualOpponent();
+        opponent.secretDigits = sequence;
+        return opponent;
     }
 
     public int[] generateSecretNumber(int numberLen) {
@@ -54,15 +54,7 @@ public class VirtualOpponent implements Opponent {
         return digits;
     }
 
-    private String guessResponseMessage(int numberCows, int numberBulls) {
-        return String.format("cows: %d, bulls: %d", numberCows, numberBulls);
-    }
-
-    private String winMessage() {
-        return "congrats! you've won.";
-    }
-
-    public int countCows(int[] guess, int[] actual) {
+    private int countCows(int[] guess) {
         int count = 0;
         for (int i = 0; i < guess.length; i++) {
             for (int j = 0; j < guess.length; j++) {
@@ -70,7 +62,7 @@ public class VirtualOpponent implements Opponent {
                     continue;
                 }
 
-                if (guess[j] == actual[i]) {
+                if (guess[j] == secretDigits[i]) {
                     count++;
                 }
             }
@@ -79,10 +71,10 @@ public class VirtualOpponent implements Opponent {
         return count;
     }
 
-    public int countBulls(int[] guess, int[] actual) {
+    private int countBulls(int[] guess) {
         int count = 0;
         for (int i = 0; i < guess.length; i++) {
-            if (guess[i] == actual[i]) {
+            if (guess[i] == secretDigits[i]) {
                 count++;
             }
         }

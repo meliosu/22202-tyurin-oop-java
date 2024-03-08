@@ -8,55 +8,47 @@ import org.junit.jupiter.api.Test;
 
 public class TestVirtualOpponent {
     VirtualOpponent opponent;
+    int[] guess;
 
-    int[] defaultGuess() {
+    int[] defaultSecret() {
         return new int[]{1, 2, 3, 4};
     }
 
     @BeforeEach
     void setUpOpponent() {
-        opponent = new VirtualOpponent();
+        opponent = VirtualOpponent.withSecretSequence(defaultSecret());
     }
 
     @Test
     @DisplayName("No Cows")
     void noCows() {
-        int[] guess = defaultGuess();
-        int[] secret = {5, 6, 7, 8};
-        assertEquals(0, opponent.countCows(guess, secret));
-
-        guess = new int[]{2, 4, 6, 8};
-        secret = new int[]{1, 3, 5, 7};
-
-        assertEquals(0, opponent.countCows(guess, secret));
+        guess = new int[]{5, 6, 7, 8};
+        assertEquals(0, opponent.receiveGuessResponse(guess).getNumberCows());
     }
 
     @Test
     @DisplayName("All Cows")
     void allCows() {
-        int[] guess = defaultGuess();
-        int[] secret = {4, 3, 2, 1};
+        guess = new int[]{4, 3, 2, 1};
 
-        assertEquals(4, opponent.countCows(guess, secret));
+        assertEquals(4, opponent.receiveGuessResponse(guess).getNumberCows());
     }
 
     @Test
     @DisplayName("All Bulls")
     void allBulls() {
-        int[] guess = defaultGuess();
-        int[] secret = defaultGuess();
+        guess = defaultSecret();
 
-        assertEquals(4, opponent.countBulls(guess, secret));
+        assertEquals(4, opponent.receiveGuessResponse(guess).getNumberBulls());
     }
 
     @Test
     @DisplayName("Mixed Cows and Bulls")
     void mixedCowsBulls() {
-        int[] guess = defaultGuess();
-        int[] secret = {1, 4, 3, 2};
+        guess = new int[]{1, 2, 4, 3};
 
-        assertEquals(2, opponent.countCows(guess, secret));
-        assertEquals(2, opponent.countBulls(guess, secret));
+        assertEquals(2, opponent.receiveGuessResponse(guess).getNumberCows());
+        assertEquals(2, opponent.receiveGuessResponse(guess).getNumberBulls());
     }
 
     @Test

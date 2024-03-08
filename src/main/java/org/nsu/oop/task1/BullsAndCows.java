@@ -18,7 +18,7 @@ public class BullsAndCows {
 
     public void run() {
         gameOpponent.establish(gameConfig);
-        ioStream.send(gameOpponent.greetingMessage());
+        ioStream.send(greetingMessage());
         while (!gameOpponent.hasLost()) {
             int[] guess;
             try {
@@ -28,8 +28,8 @@ public class BullsAndCows {
                 continue;
             }
 
-            String response = gameOpponent.receiveGuessResponse(guess);
-            ioStream.send(response);
+            GuessResponse response = gameOpponent.receiveGuessResponse(guess);
+            ioStream.send(responseMessage(response));
         }
     }
 
@@ -60,5 +60,13 @@ public class BullsAndCows {
 
     private String invalidGuessMessage() {
         return "invalid guess format, please try again";
+    }
+
+    private String greetingMessage() {
+        return "welcome to a game of bulls and cows! please enter your guess";
+    }
+
+    private String responseMessage(GuessResponse response) {
+        return String.format("bulls: %d, cows: %d", response.getNumberBulls(), response.getNumberCows());
     }
 }
