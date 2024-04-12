@@ -1,7 +1,6 @@
 package org.nsu.oop.task2.instructions;
 
 import org.nsu.oop.task2.Context;
-import org.nsu.oop.task2.exceptions.BadArithmeticException;
 import org.nsu.oop.task2.exceptions.BadContextException;
 import org.nsu.oop.task2.exceptions.BadOperandsException;
 import org.nsu.oop.task2.exceptions.InstructionException;
