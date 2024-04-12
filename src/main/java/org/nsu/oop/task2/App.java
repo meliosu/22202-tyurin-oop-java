@@ -4,8 +4,8 @@ public class App {
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
 
-        if (args.length > 1) {
-            calculator.executeFile(args[1]);
+        if (args.length > 0) {
+            calculator.executeFile(args[0]);
         } else {
             calculator.executeStdin();
         }
