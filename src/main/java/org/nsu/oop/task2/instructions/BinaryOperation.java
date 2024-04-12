@@ -25,11 +25,7 @@ public abstract class BinaryOperation extends Instruction {
             throw new BadContextException("not enough values in stack", this);
         }
 
-        try {
-            Double res = performOperation(lhs, rhs);
-            context.push(res);
-        } catch (ArithmeticException exception) {
-            throw new BadArithmeticException(exception.getMessage(), this);
-        }
+        Double res = performOperation(lhs, rhs);
+        context.push(res);
     }
 }

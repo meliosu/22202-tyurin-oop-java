@@ -15,11 +15,11 @@ public class Sqrt extends Instruction {
             throw new BadContextException("no value in stack", this);
         }
 
-        try {
-            Double root = Math.sqrt(value);
-            context.push(root);
-        } catch (ArithmeticException exception) {
-            throw new BadArithmeticException(exception.getMessage(), this);
+        if (value < 0) {
+            throw new BadArithmeticException("taking root of a negative number", this);
         }
+
+        Double root = Math.sqrt(value);
+        context.push(root);
     }
 }
