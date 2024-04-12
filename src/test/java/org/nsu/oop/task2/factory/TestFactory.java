@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nsu.oop.task2.InstructionFactory;
 import org.nsu.oop.task2.exceptions.InstructionFactoryException;
-import org.nsu.oop.task2.instructions.Instruction;
 
 public class TestFactory {
     InstructionFactory factory;
@@ -21,22 +20,22 @@ public class TestFactory {
 
         Assertions.assertDoesNotThrow(() -> {
             for (String instructionName : instructions) {
-                Instruction instruction = factory.getInstruction(instructionName);
+                factory.getInstruction(instructionName);
             }
         });
     }
 
     @Test
     void getInvalidInstruction() {
-        Assertions.assertThrows(InstructionFactoryException.class, () -> {
-            factory.getInstruction("DOESNT_EXIST");
-        });
+        Assertions.assertThrows(InstructionFactoryException.class,
+                () -> factory.getInstruction("DOESNT_EXIST")
+        );
     }
 
     @Test
     void invalidFactoryConfigPath() {
-        Assertions.assertThrows(InstructionFactoryException.class, () -> {
-            new InstructionFactory("/not a valid path");
-        });
+        Assertions.assertThrows(InstructionFactoryException.class,
+                () -> new InstructionFactory("/not a valid path")
+        );
     }
 }
