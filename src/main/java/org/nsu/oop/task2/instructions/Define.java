@@ -6,21 +6,20 @@ import org.nsu.oop.task2.exceptions.*;
 public class Define extends Instruction {
     @Override
     public void execute(String[] operands, Context context) throws InstructionException {
-        checkOperandsCount(operands);
+        String variable, valueString;
+        try {
+            variable = operands[0];
+            valueString = operands[1];
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            throw new BadOperandsException("not enough operands provided", this);
+        }
 
-        String variable = operands[0];
-        String valueString = operands[1];
         try {
             Double value = Double.valueOf(valueString);
-            context.variables.put(variable, value);
+            context.insertVariable(variable, value);
         } catch (NumberFormatException ignore) {
             String message = valueString + " must be a number ";
             throw new BadOperandsException(message, this);
         }
-    }
-
-    @Override
-    protected int getRequiredOperandsCount() {
-        return 2;
     }
 }

@@ -3,23 +3,23 @@ package org.nsu.oop.task2.instructions;
 import org.nsu.oop.task2.Context;
 import org.nsu.oop.task2.exceptions.*;
 
+import java.util.EmptyStackException;
+
 public class Sqrt extends Instruction {
     @Override
     public void execute(String[] operands, Context context) {
-        checkOperandsCount(operands);
-        checkStackSize(context);
+        Double value;
+        try {
+            value = context.pop();
+        } catch (EmptyStackException exception) {
+            throw new BadContextException("no value in stack", this);
+        }
 
-        Double value = context.stack.pop();
         try {
             Double root = Math.sqrt(value);
-            context.stack.push(root);
+            context.push(root);
         } catch (ArithmeticException exception) {
             throw new BadArithmeticException(exception.getMessage(), this);
         }
-    }
-
-    @Override
-    protected int getMinimumStackSize() {
-        return 1;
     }
 }

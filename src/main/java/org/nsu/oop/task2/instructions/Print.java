@@ -3,18 +3,20 @@ package org.nsu.oop.task2.instructions;
 import org.nsu.oop.task2.Context;
 import org.nsu.oop.task2.exceptions.*;
 
+import java.util.EmptyStackException;
+
 public class Print extends Instruction {
     @Override
     public void execute(String[] operands, Context context) throws InstructionException {
-        checkOperandsCount(operands);
-        checkStackSize(context);
+        if (operands.length != 0) {
+            throw new BadOperandsException("no operands expected", this);
+        }
 
-        Double value = context.stack.peek();
-        System.out.println(value);
-    }
-
-    @Override
-    protected int getMinimumStackSize() {
-        return 1;
+        try {
+            Double value = context.peek();
+            System.out.println(value);
+        } catch (EmptyStackException exception) {
+            throw new BadContextException("no value in stack", this);
+        }
     }
 }
