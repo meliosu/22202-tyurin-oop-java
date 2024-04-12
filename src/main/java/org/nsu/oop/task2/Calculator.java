@@ -16,7 +16,7 @@ public class Calculator {
         this.factory = new InstructionFactory("/factory.cfg");
     }
 
-    private void scanInstructions(Scanner scanner) {
+    private void executeFromScanner(Scanner scanner) {
         while (scanner.hasNext()) {
             String line = scanner.nextLine();
             String[] lineParsed = line.split(" ");
@@ -29,9 +29,14 @@ public class Calculator {
         }
     }
 
+    public void executeInstructions(String[] instructions) {
+        String instructionsStr = String.join("\n", instructions);
+        executeFromScanner(new Scanner(instructionsStr));
+    }
+
     public void executeStdin() {
         Scanner scanner = new Scanner(System.in);
-        this.scanInstructions(scanner);
+        executeFromScanner(scanner);
     }
 
     public void executeFile(String path) {
@@ -42,6 +47,6 @@ public class Calculator {
             throw new CalculatorException("input file not found");
         }
 
-        this.scanInstructions(scanner);
+        executeFromScanner(scanner);
     }
 }
