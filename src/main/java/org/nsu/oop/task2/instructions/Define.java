@@ -14,10 +14,14 @@ public class Define extends Instruction {
             throw new BadOperandsException("not enough operands provided", this);
         }
 
+        if (Character.isDigit(variable.charAt(0))) {
+            throw new BadOperandsException("invalid variable name", this);
+        }
+
         try {
             Double value = Double.valueOf(valueString);
             context.insertVariable(variable, value);
-        } catch (NumberFormatException ignore) {
+        } catch (NumberFormatException exception) {
             String message = valueString + " must be a number ";
             throw new BadOperandsException(message, this);
         }
