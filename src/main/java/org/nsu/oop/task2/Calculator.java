@@ -6,14 +6,24 @@ import org.nsu.oop.task2.instructions.Instruction;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Calculator {
     private final Context context;
     private final InstructionFactory factory;
+    private Logger logger;
 
     public Calculator() {
         this.context = new Context();
         this.factory = new InstructionFactory("/factory.cfg");
+        this.logger = null;
+    }
+
+    public static Calculator withLogging() {
+        Calculator calculator = new Calculator();
+        calculator.logger = LoggerFactory.getLogger(Calculator.class);
+        return calculator;
     }
 
     private void executeFromScanner(Scanner scanner) {
@@ -25,6 +35,11 @@ public class Calculator {
             String[] operands = Arrays.copyOfRange(lineParsed, 1, lineParsed.length);
 
             Instruction instruction = factory.getInstruction(instructionName);
+
+            if (logger != null) {
+                logger.debug("executing instruction: " + instruction);
+            }
+
             instruction.execute(operands, context);
         }
     }
