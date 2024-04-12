@@ -3,7 +3,6 @@ package org.nsu.oop.task2.instructions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.nsu.oop.task2.exceptions.BadArithmeticException;
-import org.nsu.oop.task2.exceptions.BadContextException;
 
 public class TestSqrt extends TestInstruction {
     @Test

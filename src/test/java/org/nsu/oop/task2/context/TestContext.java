@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nsu.oop.task2.Context;
-import org.nsu.oop.task2.exceptions.BadContextException;
 
 public class TestContext {
     Context context;
