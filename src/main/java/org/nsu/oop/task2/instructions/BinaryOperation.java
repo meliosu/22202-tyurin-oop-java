@@ -1,6 +1,7 @@
 package org.nsu.oop.task2.instructions;
 
 import org.nsu.oop.task2.Context;
+import org.nsu.oop.task2.exceptions.BadArithmeticException;
 import org.nsu.oop.task2.exceptions.BadContextException;
 import org.nsu.oop.task2.exceptions.BadOperandsException;
 import org.nsu.oop.task2.exceptions.InstructionException;
@@ -8,7 +9,7 @@ import org.nsu.oop.task2.exceptions.InstructionException;
 import java.util.EmptyStackException;
 
 public abstract class BinaryOperation extends Instruction {
-    protected abstract Double performOperation(Double lhs, Double rhs) throws ArithmeticException;
+    protected abstract Double performOperation(Double lhs, Double rhs) throws BadArithmeticException;
 
     @Override
     public void execute(String[] operands, Context context) throws InstructionException {
