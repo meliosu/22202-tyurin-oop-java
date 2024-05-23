@@ -82,4 +82,30 @@ public class Factory {
 
         factoryController.start();
     }
+
+    public int getEngineCount() {
+        return engineStorage.getTotalCount();
+    }
+
+    public int getFrameCount() {
+        return frameStorage.getTotalCount();
+    }
+
+    public int getAccessoryCount() {
+        return accessoryStorage.getTotalCount();
+    }
+
+    public void setEngineSpeed(int sleepMs) {
+        engineProducer.setSpeed(sleepMs);
+    }
+
+    public void setFrameSpeed(int sleepMs) {
+        frameProducer.setSpeed(sleepMs);
+    }
+
+    public void setAccessorySpeed(int sleepMs) {
+        for (AccessoryProducer producer : accessoryProducers) {
+            producer.setSpeed(sleepMs);
+        }
+    }
 }
