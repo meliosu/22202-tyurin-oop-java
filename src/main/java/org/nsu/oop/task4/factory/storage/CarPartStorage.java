@@ -20,7 +20,7 @@ public abstract class CarPartStorage {
         }
 
         parts.add(part);
-        notify();
+        notifyAll();
     }
 
     public synchronized CarPart takePart() throws InterruptedException {
@@ -28,8 +28,8 @@ public abstract class CarPartStorage {
             wait();
         }
 
-        CarPart part = parts.removeFirst();
-        notify();
+        CarPart part = parts.remove(0);
+        notifyAll();
         return part;
     }
 
