@@ -6,14 +6,14 @@ import java.lang.reflect.Field;
 import java.util.Properties;
 
 public class FactoryConfig {
-    public final int engineStorageSize = 1000;
-    public final int trunkStorageSize = 1000;
-    public final int accessoryStorageSize = 1000;
-    public final int carStorageSize = 1000;
-    public final int accessoryProducers = 10;
-    public final int assemblyWorkers = 8;
-    public final int carDealers = 5;
-    public final boolean enableLogging = false;
+    public int engineStorageSize = 1000;
+    public int trunkStorageSize = 1000;
+    public int accessoryStorageSize = 1000;
+    public int carStorageSize = 1000;
+    public int accessoryProducers = 10;
+    public int assemblyWorkers = 8;
+    public int carDealers = 5;
+    public boolean enableLogging = false;
 
     public FactoryConfig(String name) {
         InputStream configFile = getClass().getResourceAsStream(name);
@@ -27,21 +27,25 @@ public class FactoryConfig {
 
         for (Field field : getClass().getFields()) {
             String fieldName = field.getName();
-            if (properties.contains(fieldName)) {
-                // allow booleans
-                int value = Integer.parseInt(properties.getProperty(fieldName));
+            if (properties.containsKey(fieldName)) {
+                Object value;
+
+                if (fieldName.equals("enableLogging")) {
+                    value = Boolean.parseBoolean(properties.getProperty(fieldName));
+                } else {
+                    value = Integer.parseInt(properties.getProperty(fieldName));
+                }
 
                 try {
                     field.set(this, value);
-                } catch (IllegalAccessException ignored) {
-                    // change
-                    System.err.println("Illegal access!");
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("error in factory config" + e.getMessage());
                 }
             }
         }
     }
 
     public FactoryConfig() {
-        this("factory.cfg");
+        this("/factory.cfg");
     }
 }
