@@ -30,11 +30,15 @@ public abstract class Producer extends Thread {
                 Thread.sleep(sleepMs);
 
                 part = producePart();
-                storage.loadPart(part);
+                storage.load(part);
             } catch (InterruptedException e) {
                 break;
             }
         }
+    }
+
+    public void setSpeed(int sleepMs) {
+        this.sleepMs = sleepMs;
     }
 
     public abstract Part producePart();
