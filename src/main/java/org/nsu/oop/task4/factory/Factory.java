@@ -3,9 +3,7 @@ package org.nsu.oop.task4.factory;
 import org.nsu.oop.task4.factory.assembler.AssemblyLine;
 import org.nsu.oop.task4.factory.dealer.Dealer;
 import org.nsu.oop.task4.factory.parts.*;
-import org.nsu.oop.task4.factory.producer.CarAccessoryProducer;
-import org.nsu.oop.task4.factory.producer.CarEngineProducer;
-import org.nsu.oop.task4.factory.producer.CarTrunkProducer;
+import org.nsu.oop.task4.factory.producers.*;
 import org.nsu.oop.task4.factory.storage.*;
 
 import java.io.IOException;
@@ -13,13 +11,13 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 public class Factory {
-    private final Storage<CarPart> engineStorage;
-    private final Storage<CarPart> trunkStorage;
-    private final Storage<CarPart> accessoryStorage;
+    private final Storage<Part> engineStorage;
+    private final Storage<Part> frameStorage;
+    private final Storage<Part> accessoryStorage;
 
-    private final CarEngineProducer engineProducer;
-    private final CarTrunkProducer trunkProducer;
-    private final CarAccessoryProducer[] accessoryProducers;
+    private final EngineProducer engineProducer;
+    private final FrameProducer frameProducer;
+    private final AccessoryProducer[] accessoryProducers;
 
     private final AssemblyLine assemblyLine;
     private final Storage<Car> carStorage;
@@ -29,22 +27,22 @@ public class Factory {
 
     public Factory(FactoryConfig config) {
         engineStorage = new Storage<>(config.engineStorageSize);
-        trunkStorage = new Storage<>(config.trunkStorageSize);
+        frameStorage = new Storage<>(config.trunkStorageSize);
         accessoryStorage = new Storage<>(config.accessoryStorageSize);
         carStorage = new Storage<>(config.carStorageSize);
 
-        engineProducer = new CarEngineProducer(engineStorage);
-        trunkProducer = new CarTrunkProducer(trunkStorage);
+        engineProducer = new EngineProducer(engineStorage);
+        frameProducer = new FrameProducer(frameStorage);
 
-        accessoryProducers = new CarAccessoryProducer[config.accessoryProducers];
+        accessoryProducers = new AccessoryProducer[config.accessoryProducers];
         for (int i = 0; i < config.accessoryProducers; i++) {
-            accessoryProducers[i] = new CarAccessoryProducer(accessoryStorage);
+            accessoryProducers[i] = new AccessoryProducer(accessoryStorage);
         }
 
         assemblyLine = new AssemblyLine(
                 config.assemblyWorkers,
                 10,
-                trunkStorage,
+                frameStorage,
                 engineStorage,
                 accessoryStorage,
                 carStorage
@@ -72,9 +70,9 @@ public class Factory {
 
     public void launch() {
         engineProducer.start();
-        trunkProducer.start();
+        frameProducer.start();
 
-        for (CarAccessoryProducer producer : accessoryProducers) {
+        for (AccessoryProducer producer : accessoryProducers) {
             producer.start();
         }
 

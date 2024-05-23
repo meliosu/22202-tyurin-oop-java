@@ -9,21 +9,21 @@ public class AssemblyLine extends ThreadPool {
 
     private final Storage<Car> carStorage;
 
-    private final Storage<CarPart> engineStorage;
-    private final Storage<CarPart> trunkStorage;
-    private final Storage<CarPart> accessoryStorage;
+    private final Storage<Part> engineStorage;
+    private final Storage<Part> frameStorage;
+    private final Storage<Part> accessoryStorage;
 
     public AssemblyLine(
             int size,
             int sleepMs,
-            Storage<CarPart> trunkStorage,
-            Storage<CarPart> engineStorage,
-            Storage<CarPart> accessoryStorage,
+            Storage<Part> frameStorage,
+            Storage<Part> engineStorage,
+            Storage<Part> accessoryStorage,
             Storage<Car> carStorage
     ) {
         super(size);
         this.sleepMs = sleepMs;
-        this.trunkStorage = trunkStorage;
+        this.frameStorage = frameStorage;
         this.engineStorage = engineStorage;
         this.accessoryStorage = accessoryStorage;
         this.carStorage = carStorage;
@@ -32,12 +32,12 @@ public class AssemblyLine extends ThreadPool {
     public void assembleCar() {
         enqueue(() -> {
             try {
-                CarEngine engine = (CarEngine) engineStorage.takePart();
-                CarTrunk trunk = (CarTrunk) trunkStorage.takePart();
-                CarAccessory accessory = (CarAccessory) accessoryStorage.takePart();
+                Engine engine = (Engine) engineStorage.takePart();
+                Frame frame = (Frame) frameStorage.takePart();
+                Accessory accessory = (Accessory) accessoryStorage.takePart();
 
                 Thread.sleep(sleepMs);
-                Car car = new Car(engine, trunk, accessory);
+                Car car = new Car(engine, frame, accessory);
 
                 carStorage.loadPart(car);
             } catch (InterruptedException ignored) {}

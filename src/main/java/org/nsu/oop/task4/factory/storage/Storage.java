@@ -1,7 +1,5 @@
 package org.nsu.oop.task4.factory.storage;
 
-import org.nsu.oop.task4.factory.parts.CarPart;
-
 import java.util.ArrayList;
 import java.util.List;
 

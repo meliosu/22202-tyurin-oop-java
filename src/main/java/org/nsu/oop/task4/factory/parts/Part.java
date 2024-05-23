@@ -1,9 +1,9 @@
 package org.nsu.oop.task4.factory.parts;
 
-public abstract class CarPart {
+public abstract class Part {
     private final int id;
 
-    public CarPart(int id) {
+    public Part(int id) {
         this.id = id;
     }
 

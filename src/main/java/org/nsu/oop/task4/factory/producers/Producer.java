@@ -1,14 +1,14 @@
-package org.nsu.oop.task4.factory.producer;
+package org.nsu.oop.task4.factory.producers;
 
-import org.nsu.oop.task4.factory.parts.CarPart;
+import org.nsu.oop.task4.factory.parts.Part;
 import org.nsu.oop.task4.factory.storage.Storage;
 
 public abstract class Producer extends Thread {
     private int sleepMs;
-    private final Storage<CarPart> storage;
+    private final Storage<Part> storage;
     protected int serialNumber = 0;
 
-    public Producer(Storage<CarPart> storage, int sleepMs) {
+    public Producer(Storage<Part> storage, int sleepMs) {
         this.sleepMs = sleepMs;
         this.storage = storage;
     }
@@ -24,7 +24,7 @@ public abstract class Producer extends Thread {
     @Override
     public void run() {
         while (true) {
-            CarPart part;
+            Part part;
 
             try {
                 Thread.sleep(sleepMs);
@@ -37,5 +37,5 @@ public abstract class Producer extends Thread {
         }
     }
 
-    public abstract CarPart producePart();
+    public abstract Part producePart();
 }
