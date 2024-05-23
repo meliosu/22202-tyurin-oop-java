@@ -9,7 +9,8 @@ public class FactoryConfig {
     public final int engineStorageSize = 1000;
     public final int trunkStorageSize = 1000;
     public final int accessoryStorageSize = 1000;
-    public final int accessorySuppliers = 10;
+    public final int carStorageSize = 1000;
+    public final int accessoryProducers = 10;
     public final int assemblyWorkers = 8;
     public final int carDealers = 5;
     public final boolean enableLogging = false;
