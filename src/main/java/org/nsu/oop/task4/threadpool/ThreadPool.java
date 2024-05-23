@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ThreadPool {
-    private int numWorkers;
-    private ArrayList<Thread> workers;
-    private LinkedBlockingQueue<Runnable> queue;
+    private final int numWorkers;
+    private final ArrayList<Thread> workers;
+    private final LinkedBlockingQueue<Runnable> queue;
 
     public ThreadPool(int size) {
         numWorkers = size;
@@ -23,6 +23,8 @@ public class ThreadPool {
                     }
                 }
             }));
+
+            workers.get(i).start();
         }
     }
 
@@ -38,32 +40,11 @@ public class ThreadPool {
 
     public void stop() {
         for (Thread worker : workers) {
-            worker.interrupt();
+            try {
+                worker.interrupt();
+                worker.join();
+            } catch (InterruptedException ignored) {}
         }
-    }
-
-    public void resize(int newSize) {
-        if (newSize == numWorkers) {
-            return;
-        } else if (newSize > numWorkers) {
-            for (int i = 0; i < newSize - numWorkers; i++) {
-                workers.add(new Thread(() -> {
-                    while (true) {
-                        try {
-                            queue.take().run();
-                        } catch (InterruptedException e) {
-                            break;
-                        }
-                    }
-                }));
-            }
-        } else {
-            for (int i = newSize; i < numWorkers; i++) {
-                workers.get(i).interrupt();
-            }
-        }
-
-        numWorkers = newSize;
     }
 
     public int getSize() {
