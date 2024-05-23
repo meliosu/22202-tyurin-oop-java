@@ -4,17 +4,17 @@ import org.nsu.oop.task4.factory.Factory;
 import org.nsu.oop.task4.factory.parts.Accessory;
 import org.nsu.oop.task4.factory.parts.Engine;
 import org.nsu.oop.task4.factory.parts.Frame;
-import org.nsu.oop.task4.pubsub.Event;
 import org.nsu.oop.task4.pubsub.Publisher;
 import org.nsu.oop.task4.pubsub.Subscriber;
 import org.nsu.oop.task4.ui.Menu;
 
-public class Controller implements Subscriber<FactoryEvent> {
+public class Controller implements Subscriber<FactoryEvent>, Publisher<FactoryEvent> {
     Factory factory;
     Menu menu;
 
-    public Controller(Factory factory) {
+    public Controller(Factory factory, Menu menu) {
         this.factory = factory;
+        this.menu = menu;
     }
 
     @Override
@@ -24,6 +24,11 @@ public class Controller implements Subscriber<FactoryEvent> {
         } else if (event instanceof EventStockChange) {
             handleStockChange((EventStockChange) event);
         }
+    }
+
+    @Override
+    public void publish(FactoryEvent event) {
+        menu.onEvent((EventStockChange) event);
     }
 
     private void handleSpeedChange(EventChangeSpeed event) {
@@ -40,15 +45,6 @@ public class Controller implements Subscriber<FactoryEvent> {
     }
 
     private void handleStockChange(EventStockChange event) {
-        Class<?> partClass = event.getPartClass();
-        int amount = event.getAmount();
-
-        if (partClass == Frame.class) {
-            menu.setFrameAmount(amount);
-        } else if (partClass == Engine.class) {
-            menu.setEngineAmount(amount);
-        } else if (partClass == Accessory.class) {
-            menu.setAccessoryAmount(amount);
-        }
+        this.publish(event);
     }
 }
