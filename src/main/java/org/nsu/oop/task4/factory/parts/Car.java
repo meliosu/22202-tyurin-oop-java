@@ -1,4 +1,8 @@
-package org.nsu.oop.task4.factory;
+package org.nsu.oop.task4.factory.parts;
+
+import org.nsu.oop.task4.factory.parts.CarAccessory;
+import org.nsu.oop.task4.factory.parts.CarEngine;
+import org.nsu.oop.task4.factory.parts.CarTrunk;
 
 public class Car {
     private final CarEngine engine;

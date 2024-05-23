@@ -1,4 +1,4 @@
-package org.nsu.oop.task4.factory;
+package org.nsu.oop.task4.factory.parts;
 
 public abstract class CarPart {
     private final int id;
