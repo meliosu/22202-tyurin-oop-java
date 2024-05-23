@@ -5,16 +5,16 @@ import org.nsu.oop.task4.factory.parts.CarPart;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CarPartStorage {
+public class Storage <T> {
     private final int capacity;
-    private final List<CarPart> parts;
+    private final List<T> parts;
 
-    public CarPartStorage(int capacity) {
+    public Storage(int capacity) {
         this.capacity = capacity;
         parts = new ArrayList<>();
     }
 
-    public synchronized void loadPart(CarPart part) throws InterruptedException {
+    public synchronized void loadPart(T part) throws InterruptedException {
         while (isFull()) {
             wait();
         }
@@ -23,12 +23,12 @@ public abstract class CarPartStorage {
         notifyAll();
     }
 
-    public synchronized CarPart takePart() throws InterruptedException {
+    public synchronized T takePart() throws InterruptedException {
         while (isEmpty()) {
             wait();
         }
 
-        CarPart part = parts.remove(0);
+        T part = parts.remove(0);
         notifyAll();
         return part;
     }

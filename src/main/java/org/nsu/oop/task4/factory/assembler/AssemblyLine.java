@@ -1,31 +1,25 @@
 package org.nsu.oop.task4.factory.assembler;
 
-import org.nsu.oop.task4.factory.parts.Car;
-import org.nsu.oop.task4.factory.parts.CarAccessory;
-import org.nsu.oop.task4.factory.parts.CarEngine;
-import org.nsu.oop.task4.factory.parts.CarTrunk;
-import org.nsu.oop.task4.factory.storage.CarAccessoryStorage;
-import org.nsu.oop.task4.factory.storage.CarEngineStorage;
-import org.nsu.oop.task4.factory.storage.CarStorage;
-import org.nsu.oop.task4.factory.storage.CarTrunkStorage;
+import org.nsu.oop.task4.factory.parts.*;
+import org.nsu.oop.task4.factory.storage.Storage;
 import org.nsu.oop.task4.threadpool.ThreadPool;
 
 public class AssemblyLine extends ThreadPool {
     private final int sleepMs;
 
-    private final CarStorage carStorage;
+    private final Storage<Car> carStorage;
 
-    private final CarEngineStorage engineStorage;
-    private final CarTrunkStorage trunkStorage;
-    private final CarAccessoryStorage accessoryStorage;
+    private final Storage<CarPart> engineStorage;
+    private final Storage<CarPart> trunkStorage;
+    private final Storage<CarPart> accessoryStorage;
 
     public AssemblyLine(
             int size,
             int sleepMs,
-            CarTrunkStorage trunkStorage,
-            CarEngineStorage engineStorage,
-            CarAccessoryStorage accessoryStorage,
-            CarStorage carStorage
+            Storage<CarPart> trunkStorage,
+            Storage<CarPart> engineStorage,
+            Storage<CarPart> accessoryStorage,
+            Storage<Car> carStorage
     ) {
         super(size);
         this.sleepMs = sleepMs;

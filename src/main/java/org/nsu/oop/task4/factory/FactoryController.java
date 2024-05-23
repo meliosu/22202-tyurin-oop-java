@@ -1,13 +1,14 @@
 package org.nsu.oop.task4.factory;
 
 import org.nsu.oop.task4.factory.assembler.AssemblyLine;
-import org.nsu.oop.task4.factory.storage.CarStorage;
+import org.nsu.oop.task4.factory.parts.Car;
+import org.nsu.oop.task4.factory.storage.Storage;
 
 public class FactoryController extends Thread {
     private final AssemblyLine assemblyLine;
-    private final CarStorage carStorage;
+    private final Storage<Car> carStorage;
 
-    public FactoryController(AssemblyLine assemblyLine, CarStorage carStorage) {
+    public FactoryController(AssemblyLine assemblyLine, Storage<Car> carStorage) {
         this.assemblyLine = assemblyLine;
         this.carStorage = carStorage;
     }

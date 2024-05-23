@@ -2,13 +2,10 @@ package org.nsu.oop.task4.factory.producer;
 
 import org.nsu.oop.task4.factory.parts.CarAccessory;
 import org.nsu.oop.task4.factory.parts.CarPart;
-import org.nsu.oop.task4.factory.storage.CarAccessoryStorage;
-import org.nsu.oop.task4.factory.storage.CarEngineStorage;
+import org.nsu.oop.task4.factory.storage.Storage;
 
 public class CarAccessoryProducer extends Producer {
-    private int serialNumber = 0;
-
-    public CarAccessoryProducer(CarAccessoryStorage storage) {
+    public CarAccessoryProducer(Storage<CarPart> storage) {
         super(storage, 10);
     }
 
