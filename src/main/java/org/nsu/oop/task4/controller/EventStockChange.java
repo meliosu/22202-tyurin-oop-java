@@ -2,15 +2,21 @@ package org.nsu.oop.task4.controller;
 
 public class EventStockChange extends FactoryEvent {
     private final Class<?> partClass;
-    private final int amount;
+    private final int current;
+    private final int total;
 
-    public EventStockChange(Class<?> partClass, int amount) {
+    public EventStockChange(Class<?> partClass, int current, int total) {
         this.partClass = partClass;
-        this.amount = amount;
+        this.current = current;
+        this.total = total;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getTotalAmount() {
+        return total;
+    }
+
+    public int getCurrentAmount() {
+        return current;
     }
 
     public Class<?> getPartClass() {
