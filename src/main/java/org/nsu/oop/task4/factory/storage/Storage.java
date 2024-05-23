@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Storage <T> {
     private final int capacity;
+    private int count = 0;
     private final List<T> parts;
 
     public Storage(int capacity) {
@@ -12,16 +13,17 @@ public class Storage <T> {
         parts = new ArrayList<>();
     }
 
-    public synchronized void loadPart(T part) throws InterruptedException {
+    public synchronized void load(T part) throws InterruptedException {
         while (isFull()) {
             wait();
         }
 
         parts.add(part);
+        count++;
         notifyAll();
     }
 
-    public synchronized T takePart() throws InterruptedException {
+    public synchronized T unload() throws InterruptedException {
         while (isEmpty()) {
             wait();
         }
@@ -45,5 +47,9 @@ public class Storage <T> {
 
     public boolean isFull() {
         return parts.size() == capacity;
+    }
+
+    public int getTotalCount() {
+        return count;
     }
 }
