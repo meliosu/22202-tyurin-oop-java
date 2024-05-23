@@ -23,7 +23,7 @@ public class Dealer extends Thread {
         while (true) {
             try {
                 Thread.sleep(sleepMs);
-                Car car = carStorage.takePart();
+                Car car = carStorage.unload();
 
                 if (logger != null) {
                     logger.info("Dealer " + id + ": " + car);

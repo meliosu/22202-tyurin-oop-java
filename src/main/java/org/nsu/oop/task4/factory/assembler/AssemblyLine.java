@@ -32,14 +32,14 @@ public class AssemblyLine extends ThreadPool {
     public void assembleCar() {
         enqueue(() -> {
             try {
-                Engine engine = (Engine) engineStorage.takePart();
-                Frame frame = (Frame) frameStorage.takePart();
-                Accessory accessory = (Accessory) accessoryStorage.takePart();
+                Engine engine = (Engine) engineStorage.unload();
+                Frame frame = (Frame) frameStorage.unload();
+                Accessory accessory = (Accessory) accessoryStorage.unload();
 
                 Thread.sleep(sleepMs);
                 Car car = new Car(engine, frame, accessory);
 
-                carStorage.loadPart(car);
+                carStorage.load(car);
             } catch (InterruptedException ignored) {}
         });
     }
