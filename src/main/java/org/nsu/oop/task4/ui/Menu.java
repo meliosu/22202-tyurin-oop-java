@@ -2,6 +2,7 @@ package org.nsu.oop.task4.ui;
 
 import org.nsu.oop.task4.controller.EventStockChange;
 import org.nsu.oop.task4.factory.parts.Accessory;
+import org.nsu.oop.task4.factory.parts.Car;
 import org.nsu.oop.task4.factory.parts.Engine;
 import org.nsu.oop.task4.factory.parts.Frame;
 import org.nsu.oop.task4.pubsub.Subscriber;
@@ -15,16 +16,17 @@ public class Menu extends JFrame implements Subscriber<EventStockChange> {
 
     public Menu() {
         this.setTitle("MT Factory Simulation");
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1280, 720);
 
         Container container = getContentPane();
 
         statsSection = new StatsSection();
-        container.add(statsSection, TOP_ALIGNMENT);
+        container.add(statsSection, BorderLayout.PAGE_START);
 
         settingsSection = new SettingsSection();
-        container.add(settingsSection, BOTTOM_ALIGNMENT);
+        container.add(settingsSection, BorderLayout.PAGE_END);
 
         this.pack();
     }
@@ -45,6 +47,8 @@ public class Menu extends JFrame implements Subscriber<EventStockChange> {
             statsSection.setEngineAmount(current, total);
         } else if (partClass == Accessory.class) {
             statsSection.setAccessoryAmount(current, total);
+        } else if (partClass == Car.class) {
+            statsSection.setCarAmount(current, total);
         }
     }
 }

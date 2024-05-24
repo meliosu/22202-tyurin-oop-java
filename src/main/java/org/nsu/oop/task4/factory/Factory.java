@@ -26,10 +26,10 @@ public class Factory {
     private final FactoryController factoryController;
 
     public Factory(FactoryConfig config) {
-        engineStorage = new Storage<>(config.engineStorageSize);
-        frameStorage = new Storage<>(config.trunkStorageSize);
-        accessoryStorage = new Storage<>(config.accessoryStorageSize);
-        carStorage = new Storage<>(config.carStorageSize);
+        engineStorage = new Storage<>(config.engineStorageSize, Engine.class);
+        frameStorage = new Storage<>(config.trunkStorageSize, Frame.class);
+        accessoryStorage = new Storage<>(config.accessoryStorageSize, Accessory.class);
+        carStorage = new Storage<>(config.carStorageSize, Car.class);
 
         engineProducer = new EngineProducer(engineStorage);
         frameProducer = new FrameProducer(frameStorage);

@@ -12,9 +12,26 @@ public class Controller implements Subscriber<FactoryEvent>, Publisher<FactoryEv
     Factory factory;
     Menu menu;
 
-    public Controller(Factory factory, Menu menu) {
+    private static Controller instance = null;
+
+    public static Controller getInstance() {
+        if (instance == null) {
+            instance = new Controller();
+        }
+
+        return instance;
+    }
+
+    private Controller() {}
+
+    public Controller addFactory(Factory factory) {
         this.factory = factory;
+        return this;
+    }
+
+    public Controller addMenu(Menu menu) {
         this.menu = menu;
+        return this;
     }
 
     @Override
@@ -28,10 +45,18 @@ public class Controller implements Subscriber<FactoryEvent>, Publisher<FactoryEv
 
     @Override
     public void publish(FactoryEvent event) {
+        if (menu == null) {
+            throw new RuntimeException("menu not attached to controller");
+        }
+
         menu.onEvent((EventStockChange) event);
     }
 
     private void handleSpeedChange(EventChangeSpeed event) {
+        if (factory == null) {
+            throw new RuntimeException("factory not attached to controller");
+        }
+
         Class<?> partClass = event.getPartClass();
         int speed = event.getSpeed();
 

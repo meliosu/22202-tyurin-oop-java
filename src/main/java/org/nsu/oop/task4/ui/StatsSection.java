@@ -7,17 +7,20 @@ public class StatsSection extends JPanel {
     private final PartInfo framePanel;
     private final PartInfo enginePanel;
     private final PartInfo accessoryPanel;
+    private final PartInfo carPanel;
 
     public StatsSection() {
-        super();
+        super(new GridLayout(2, 2));
 
-        framePanel = new PartInfo();
-        enginePanel = new PartInfo();
-        accessoryPanel = new PartInfo();
+        framePanel = new PartInfo("Frame Production");
+        enginePanel = new PartInfo("Engine Production");
+        accessoryPanel = new PartInfo("Accessory Production");
+        carPanel = new PartInfo("Car Production");
 
         add(framePanel);
         add(enginePanel);
         add(accessoryPanel);
+        add(carPanel);
     }
 
     public void setFrameAmount(int currentAmount, int totalAmount) {
@@ -30,5 +33,9 @@ public class StatsSection extends JPanel {
 
     public void setAccessoryAmount(int currentAmount, int totalAmount) {
         accessoryPanel.setAmounts(currentAmount, totalAmount);
+    }
+
+    public void setCarAmount(int currentAmount, int totalAmount) {
+        carPanel.setAmounts(currentAmount, totalAmount);
     }
 }
