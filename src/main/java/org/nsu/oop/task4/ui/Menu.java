@@ -11,22 +11,26 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Menu extends JFrame implements Subscriber<EventStockChange> {
+    private static final int height = 480;
+    private static final int width = 640;
+
     private final StatsSection statsSection;
-    private final SettingsSection settingsSection;
 
     public Menu() {
+        super();
+
         this.setTitle("MT Factory Simulation");
+        this.setMinimumSize(new Dimension(width, height));
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1280, 720);
 
         Container container = getContentPane();
 
         statsSection = new StatsSection();
-        container.add(statsSection, BorderLayout.PAGE_START);
+        container.add(statsSection, BorderLayout.NORTH);
 
-        settingsSection = new SettingsSection();
-        container.add(settingsSection, BorderLayout.PAGE_END);
+        SettingsSection settingsSection = new SettingsSection();
+        container.add(settingsSection, BorderLayout.CENTER);
 
         this.pack();
     }

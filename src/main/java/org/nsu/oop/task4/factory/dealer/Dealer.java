@@ -6,14 +6,14 @@ import org.nsu.oop.task4.factory.storage.Storage;
 import java.util.logging.Logger;
 
 public class Dealer extends Thread {
+    private static final int sleepMs = 10;
+
     private final int id;
-    private final int sleepMs;
     private final Storage<Car> carStorage;
     private final Logger logger;
 
-    public Dealer(int id, int sleepMs, Storage<Car> carStorage, Logger logger) {
+    public Dealer(int id, Storage<Car> carStorage, Logger logger) {
         this.id = id;
-        this.sleepMs = sleepMs;
         this.carStorage = carStorage;
         this.logger = logger;
     }

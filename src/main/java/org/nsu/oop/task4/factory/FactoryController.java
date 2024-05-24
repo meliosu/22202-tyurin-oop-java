@@ -16,7 +16,8 @@ public class FactoryController extends Thread {
     @Override
     public void run() {
         while (true) {
-            if (carStorage.getSize() < carStorage.getCapacity() / 2) {
+            if (carStorage.getSize() < carStorage.getCapacity() / 2
+                    && assemblyLine.getQueueSize() < 100) {
                 assemblyLine.assembleCar();
             }
 

@@ -41,7 +41,6 @@ public class Factory {
 
         assemblyLine = new AssemblyLine(
                 config.assemblyWorkers,
-                10,
                 frameStorage,
                 engineStorage,
                 accessoryStorage,
@@ -62,7 +61,7 @@ public class Factory {
 
         dealers = new Dealer[config.carDealers];
         for (int i = 0; i < config.carDealers; i++) {
-            dealers[i] = new Dealer(i + 1, 10, carStorage, logger);
+            dealers[i] = new Dealer(i + 1, carStorage, logger);
         }
 
         factoryController = new FactoryController(assemblyLine, carStorage);
@@ -81,18 +80,6 @@ public class Factory {
         }
 
         factoryController.start();
-    }
-
-    public int getEngineCount() {
-        return engineStorage.getTotalCount();
-    }
-
-    public int getFrameCount() {
-        return frameStorage.getTotalCount();
-    }
-
-    public int getAccessoryCount() {
-        return accessoryStorage.getTotalCount();
     }
 
     public void setEngineSpeed(int sleepMs) {

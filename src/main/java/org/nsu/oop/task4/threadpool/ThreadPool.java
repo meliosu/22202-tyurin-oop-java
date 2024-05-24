@@ -50,4 +50,8 @@ public class ThreadPool {
     public int getSize() {
         return numWorkers;
     }
+
+    public synchronized int getQueueSize() {
+        return queue.size();
+    }
 }

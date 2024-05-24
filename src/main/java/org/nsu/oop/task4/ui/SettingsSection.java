@@ -8,37 +8,48 @@ import org.nsu.oop.task4.factory.parts.Frame;
 import org.nsu.oop.task4.pubsub.Publisher;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class SettingsSection extends JPanel implements Publisher<EventChangeSpeed> {
     private final Controller controller = Controller.getInstance();
+    private static final int min = 5;
+    private static final int max = 100;
 
     public SettingsSection() {
-        super();
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        super(new GridLayout(3, 1));
 
-        addSlider("Frame Production Speed", Frame.class, 0, 100);
-        addSlider("Engine Production Speed", Engine.class, 0, 100);
-        addSlider("Accessory Production Speed", Accessory.class, 0, 100);
+        addSlider("Frame Production Speed", Frame.class);
+        addSlider("Engine Production Speed", Engine.class);
+        addSlider("Accessory Production Speed", Accessory.class);
     }
 
-    private void addSlider(String title, Class<?> partClass, int beg, int end) {
-        JSlider slider = new JSlider(beg, end);
+    private void addSlider(String title, Class<?> partClass) {
+        JSlider slider = new JSlider(SettingsSection.min, SettingsSection.max);
 
         slider.addChangeListener(e -> {
             JSlider slider1 = (JSlider) e.getSource();
             int speed = slider1.getValue();
-            publish(new EventChangeSpeed(partClass, speed));
+            int sleepMs = 500 / (speed + 1);
+            publish(new EventChangeSpeed(partClass, sleepMs));
         });
 
-        slider.setLabelTable(slider.createStandardLabels(10));
+        int numLabels = 10;
+        slider.setLabelTable(slider.createStandardLabels(
+                (SettingsSection.max - SettingsSection.min) / numLabels));
+
         slider.setPaintLabels(true);
         slider.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel label = new JLabel(title);
         label.setAlignmentX(CENTER_ALIGNMENT);
 
-        add(label);
-        add(slider);
+        JPanel wrapper = new JPanel();
+        wrapper.setLayout(new GridLayout(2, 1));
+
+        wrapper.add(label);
+        wrapper.add(slider);
+
+        add(wrapper);
     }
 
     @Override

@@ -12,10 +12,10 @@ public class StatsSection extends JPanel {
     public StatsSection() {
         super(new GridLayout(2, 2));
 
-        framePanel = new PartInfo("Frame Production");
-        enginePanel = new PartInfo("Engine Production");
-        accessoryPanel = new PartInfo("Accessory Production");
-        carPanel = new PartInfo("Car Production");
+        framePanel = new PartInfo("[Frames]");
+        enginePanel = new PartInfo("[Engines]");
+        accessoryPanel = new PartInfo("[Accessories]");
+        carPanel = new PartInfo("[Cars]");
 
         add(framePanel);
         add(enginePanel);

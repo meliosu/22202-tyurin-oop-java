@@ -5,7 +5,7 @@ import org.nsu.oop.task4.factory.storage.Storage;
 import org.nsu.oop.task4.threadpool.ThreadPool;
 
 public class AssemblyLine extends ThreadPool {
-    private final int sleepMs;
+    private static final int sleepMs = 10;
 
     private final Storage<Car> carStorage;
 
@@ -15,14 +15,12 @@ public class AssemblyLine extends ThreadPool {
 
     public AssemblyLine(
             int size,
-            int sleepMs,
             Storage<Part> frameStorage,
             Storage<Part> engineStorage,
             Storage<Part> accessoryStorage,
             Storage<Car> carStorage
     ) {
         super(size);
-        this.sleepMs = sleepMs;
         this.frameStorage = frameStorage;
         this.engineStorage = engineStorage;
         this.accessoryStorage = accessoryStorage;
