@@ -12,8 +12,9 @@ import java.awt.*;
 
 public class SettingsSection extends JPanel implements Publisher<EventChangeSpeed> {
     private final Controller controller = Controller.getInstance();
-    private static final int min = 5;
+    private static final int min = 10;
     private static final int max = 100;
+    private static final int numLabels = 9;
 
     public SettingsSection() {
         super(new GridLayout(3, 1));
@@ -33,7 +34,6 @@ public class SettingsSection extends JPanel implements Publisher<EventChangeSpee
             publish(new EventChangeSpeed(partClass, sleepMs));
         });
 
-        int numLabels = 10;
         slider.setLabelTable(slider.createStandardLabels(
                 (SettingsSection.max - SettingsSection.min) / numLabels));
 
