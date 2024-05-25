@@ -17,10 +17,6 @@ public abstract class Producer extends Thread {
         return sleepMs;
     }
 
-    public void changeSpeed(int newSleepMs) {
-        sleepMs = newSleepMs;
-    }
-
     @Override
     public void run() {
         while (true) {
