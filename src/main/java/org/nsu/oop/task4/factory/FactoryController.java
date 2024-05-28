@@ -18,7 +18,9 @@ public class FactoryController extends Thread {
         while (true) {
             if (carStorage.getSize() < carStorage.getCapacity() / 2
                     && assemblyLine.getQueueSize() < 100) {
-                assemblyLine.assembleCar();
+                for (int i = 0; i < assemblyLine.getSize(); i++) {
+                    assemblyLine.assembleCar();
+                }
             }
 
             synchronized (carStorage) {

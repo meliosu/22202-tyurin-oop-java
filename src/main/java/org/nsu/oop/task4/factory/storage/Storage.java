@@ -1,8 +1,9 @@
 package org.nsu.oop.task4.factory.storage;
 
-import org.nsu.oop.task4.controller.Controller;
 import org.nsu.oop.task4.controller.EventStockChange;
+import org.nsu.oop.task4.controller.FactoryEvent;
 import org.nsu.oop.task4.pubsub.Publisher;
+import org.nsu.oop.task4.pubsub.Subscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,16 @@ public class Storage <T> implements Publisher<EventStockChange> {
     private int count = 0;
     private final List<T> parts;
     private final Class<?> storedType;
-    private final Controller controller = Controller.getInstance();
+    private Subscriber<FactoryEvent> subscriber = null;
 
     public Storage(int capacity, Class<?> storedType) {
         this.capacity = capacity;
         this.storedType = storedType;
         this.parts = new ArrayList<>();
+    }
+
+    public void addSubscriber(Subscriber<FactoryEvent> subscriber) {
+        this.subscriber = subscriber;
     }
 
     public synchronized void load(T part) throws InterruptedException {
@@ -28,7 +33,8 @@ public class Storage <T> implements Publisher<EventStockChange> {
         parts.add(part);
         count++;
 
-        publishChange();
+        if (subscriber != null) publishChange();
+
         notifyAll();
     }
 
@@ -39,9 +45,9 @@ public class Storage <T> implements Publisher<EventStockChange> {
 
         T part = parts.remove(0);
 
-        publishChange();
-        notifyAll();
+        if (subscriber != null) publishChange();
 
+        notifyAll();
         return part;
     }
 
@@ -71,7 +77,7 @@ public class Storage <T> implements Publisher<EventStockChange> {
 
     @Override
     public void publish(EventStockChange event) {
-        controller.onEvent(event);
+        subscriber.onEvent(event);
     }
 
     public Class<?> getStoredType() {

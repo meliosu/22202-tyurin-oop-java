@@ -12,8 +12,8 @@ import java.awt.*;
 
 public class SettingsSection extends JPanel implements Publisher<EventChangeSpeed> {
     private final Controller controller = Controller.getInstance();
-    private static final int min = 10;
-    private static final int max = 100;
+    private static final int min = 20;
+    private static final int max = 200;
     private static final int numLabels = 9;
 
     public SettingsSection() {
@@ -30,7 +30,7 @@ public class SettingsSection extends JPanel implements Publisher<EventChangeSpee
         slider.addChangeListener(e -> {
             JSlider slider1 = (JSlider) e.getSource();
             int speed = slider1.getValue();
-            int sleepMs = 500 / (speed + 1);
+            int sleepMs = 1000 / speed;
             publish(new EventChangeSpeed(partClass, sleepMs));
         });
 

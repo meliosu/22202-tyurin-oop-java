@@ -12,11 +12,12 @@ public class App {
 
         Menu menu = new Menu();
 
-        Controller
+        Controller controller = Controller
                 .getInstance()
                 .addMenu(menu)
                 .addFactory(factory);
 
+        factory.addSubscriber(controller);
         menu.display();
         factory.launch();
     }

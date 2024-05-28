@@ -1,10 +1,12 @@
 package org.nsu.oop.task4.factory;
 
+import org.nsu.oop.task4.controller.FactoryEvent;
 import org.nsu.oop.task4.factory.assembler.AssemblyLine;
 import org.nsu.oop.task4.factory.dealer.Dealer;
 import org.nsu.oop.task4.factory.parts.*;
 import org.nsu.oop.task4.factory.producers.*;
 import org.nsu.oop.task4.factory.storage.*;
+import org.nsu.oop.task4.pubsub.Subscriber;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
@@ -65,6 +67,13 @@ public class Factory {
         }
 
         factoryController = new FactoryController(assemblyLine, carStorage);
+    }
+
+    public void addSubscriber(Subscriber<FactoryEvent> subscriber) {
+        engineStorage.addSubscriber(subscriber);
+        frameStorage.addSubscriber(subscriber);
+        accessoryStorage.addSubscriber(subscriber);
+        carStorage.addSubscriber(subscriber);
     }
 
     public void launch() {
