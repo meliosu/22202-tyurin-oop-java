@@ -1,0 +1,102 @@
+package org.nsu.oop.task3.ui.game;
+
+import org.nsu.oop.task3.controller.events.GameEvent;
+import org.nsu.oop.task3.controller.pubsub.Subscriber;
+import org.nsu.oop.task3.game.Position;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+public class Cells extends JPanel {
+    private final Cell[][] cells;
+    private final ArrayList<Wall> walls = new ArrayList<>();
+    private final Player firstPlayer;
+    private final Player secondPlayer;
+
+    public Cells() {
+        super();
+
+        setLayout(new GridLayout(9, 9));
+
+        // need to remove
+        setMaximumSize(new Dimension(720, 720));
+        setMinimumSize(new Dimension(720, 720));
+        setPreferredSize(new Dimension(720, 720));
+
+        cells = new Cell[9][9];
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                Cell cell = new Cell(new Position(x, y));
+                cells[x][y] = cell;
+
+                add(cell);
+            }
+        }
+
+        firstPlayer = new Player(new Position(4, 0), Color.red);
+        secondPlayer = new Player(new Position(4, 8), Color.blue);
+    }
+
+    public void addSubscriber(Subscriber<GameEvent> subscriber) {
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells.length; y++) {
+                cells[x][y].addSubscriber(subscriber);
+            }
+        }
+    }
+
+    private void clearHighlights() {
+        for (int x = 0; x < cells.length; x++) {
+            for (int y = 0; y < cells.length; y++) {
+                cells[x][y].restore();
+            }
+        }
+    }
+
+    public void highlightCells(ArrayList<Position> positions) {
+        clearHighlights();
+        for (Position pos : positions) {
+            cells[pos.x][pos.y].highlight();
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        for (Wall wall : walls) {
+            drawWall(wall, g);
+        }
+
+        drawPlayer(firstPlayer);
+        drawPlayer(secondPlayer);
+    }
+
+    private void drawPlayer(Player player) {
+
+    }
+
+    private void drawWall(Wall wall, Graphics g) {
+        int x = (getWidth() / 9) * (wall.getPosition().x + 1);
+        int y = (getHeight() / 9) * (wall.getPosition().y + 1);
+        int dim1 = 10;
+        int dim2 = 2 * getWidth() / 9;
+
+        switch (wall.getType()) {
+            case Horizontal: {
+                g.fillRect(x - dim1 / 2, y - dim2 / 2, dim1, dim2);
+                break;
+            }
+
+            case Vertical: {
+                g.fillRect(x - dim2 / 2, y - dim1 / 2, dim2, dim1);
+                break;
+            }
+        }
+    }
+
+    public void addWall(Wall wall) {
+        walls.add(wall);
+    }
+}
