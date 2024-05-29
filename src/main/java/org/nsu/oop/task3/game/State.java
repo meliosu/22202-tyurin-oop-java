@@ -129,11 +129,8 @@ public class State {
     private boolean isLegalPosition() {
         HashSet<Position> visitedCells = new HashSet<>();
 
-        if (currentPlayer == Player.First) {
-            return isReachable(firstPlayerPos, 8, visitedCells);
-        } else {
-            return isReachable(secondPlayerPos, 0, visitedCells);
-        }
+        return isReachable(firstPlayerPos, 8, visitedCells) &&
+                isReachable(secondPlayerPos, 0, visitedCells);
     }
 
     private ArrayList<Position> adjacentCells(Position pos) {
@@ -201,5 +198,37 @@ public class State {
         }
 
         return reachable;
+    }
+
+    // need to add moves to non-adjacent cells (when the opponent is near)
+    public void move(Position pos) throws IllegalMoveException {
+        ArrayList<Position> adjacent = adjacentCells(pos);
+
+        if (!adjacent.contains(pos)) {
+            throw new IllegalMoveException();
+        }
+
+        switch (currentPlayer) {
+            case First: {
+                firstPlayerPos = pos;
+                currentPlayer = Player.Second;
+                break;
+            }
+
+            case Second: {
+                secondPlayerPos = pos;
+                currentPlayer = Player.First;
+                break;
+            }
+        }
+    }
+
+    // need to add moves to non-adjacent cells (when the opponent is near)
+    public ArrayList<Position> legalMoves() {
+        if (currentPlayer == Player.First) {
+            return adjacentCells(firstPlayerPos);
+        } else {
+            return adjacentCells(secondPlayerPos);
+        }
     }
 }
