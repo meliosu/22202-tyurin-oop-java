@@ -1,12 +1,24 @@
 package org.nsu.oop.task3.game;
 
+import org.nsu.oop.task3.game.exceptions.IllegalMoveException;
+import org.nsu.oop.task3.game.exceptions.IllegalWallException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class State {
     public enum Player {
         First,
-        Second,
+        Second;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case First: return "First";
+                case Second: return "Second";
+                default: return "";
+            }
+        }
     }
 
     public enum Wall {
