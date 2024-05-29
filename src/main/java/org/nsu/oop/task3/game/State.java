@@ -1,7 +1,10 @@
 package org.nsu.oop.task3.game;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 public class State {
-    private enum Player {
+    public enum Player {
         First,
         Second,
     }
@@ -112,8 +115,91 @@ public class State {
         return hasCollisions;
     }
 
+    private Player winningPlayer() {
+        if (firstPlayerPos.y == 8) {
+            return Player.First;
+        } else if (secondPlayerPos.y == 0) {
+            return Player.Second;
+        } else {
+            return null;
+        }
+    }
+
     // bfs for possible paths to victory
     private boolean isLegalPosition() {
+        HashSet<Position> visitedCells = new HashSet<>();
 
+        if (currentPlayer == Player.First) {
+            return isReachable(firstPlayerPos, 8, visitedCells);
+        } else {
+            return isReachable(secondPlayerPos, 0, visitedCells);
+        }
+    }
+
+    private ArrayList<Position> adjacentCells(Position pos) {
+        ArrayList<Position> cells = new ArrayList<>();
+
+        for (Position neighbor : adjacentPositions(pos)) {
+            if (!hasWallBetween(pos, neighbor)) {
+                cells.add(neighbor);
+            }
+        }
+
+        return cells;
+    }
+
+    private ArrayList<Position> adjacentPositions(Position pos) {
+        ArrayList<Position> positions = new ArrayList<>();
+
+        if (pos.x != 0) {
+            positions.add(new Position(pos.x - 1, pos.y));
+        }
+
+        if (pos.y != 0) {
+            positions.add(new Position(pos.x, pos.y - 1));
+        }
+
+        if (pos.x != 8) {
+            positions.add(new Position(pos.x + 1, pos.y));
+        }
+
+        if (pos.y != 8) {
+            positions.add(new Position(pos.x, pos.y + 1));
+        }
+
+        return positions;
+    }
+
+    // need to invert
+    private boolean hasWallBetween(Position first, Position second) {
+        if (first.x == second.x) {
+            int x = first.x;
+            int y = Math.min(first.y, second.y);
+            return (x == 0 || walls[x - 1][y] == Wall.Horizontal) || (x == 8 || walls[x][y] == Wall.Horizontal);
+        } else {
+            int x = Math.min(first.x, second.x);
+            int y = first.y;
+            return (y == 0 || walls[x][y - 1] == Wall.Vertical) || (y == 8 || walls[x][y] == Wall.Vertical);
+        }
+    }
+
+    private boolean isReachable(Position pos, int rank, HashSet<Position> visited) {
+        if (pos.y == rank) {
+            return true;
+        }
+
+        if (visited.contains(pos)) {
+            return false;
+        }
+
+        visited.add(pos);
+
+        boolean reachable = false;
+
+        for (Position newPos : adjacentCells(pos)) {
+            reachable |= isReachable(newPos, rank, visited);
+        }
+
+        return reachable;
     }
 }
