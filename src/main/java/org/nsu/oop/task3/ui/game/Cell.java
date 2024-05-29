@@ -54,4 +54,8 @@ public class Cell extends JPanel {
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
         this.subscriber = subscriber;
     }
+
+    public Position getPosition() {
+        return position;
+    }
 }

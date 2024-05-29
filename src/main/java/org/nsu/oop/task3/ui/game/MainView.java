@@ -6,12 +6,13 @@ import org.nsu.oop.task3.game.Position;
 import org.nsu.oop.task3.game.State;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MainView extends JPanel {
     public static final int height = 720;
     public static final int width = 720;
 
-    private final Cells cells;
+    public final Cells cells;
     private final GameInfo info;
 
     public MainView() {
@@ -33,5 +34,9 @@ public class MainView extends JPanel {
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
         cells.addSubscriber(subscriber);
         info.addSubscriber(subscriber);
+    }
+
+    public void movePlayer(Position position, State.Player player) {
+        cells.movePlayer(position, player);
     }
 }

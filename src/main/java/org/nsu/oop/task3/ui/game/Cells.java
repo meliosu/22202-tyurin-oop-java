@@ -3,6 +3,7 @@ package org.nsu.oop.task3.ui.game;
 import org.nsu.oop.task3.controller.events.GameEvent;
 import org.nsu.oop.task3.controller.pubsub.Subscriber;
 import org.nsu.oop.task3.game.Position;
+import org.nsu.oop.task3.game.State;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,10 @@ public class Cells extends JPanel {
     public Cells() {
         super();
 
-        setLayout(new GridLayout(9, 9));
+        setLayout(new OverlayLayout(this));
+
+        JPanel wrapper = new JPanel();
+        wrapper.setLayout(new GridLayout(9, 9));
 
         // need to remove
         setMaximumSize(new Dimension(720, 720));
@@ -30,12 +34,16 @@ public class Cells extends JPanel {
                 Cell cell = new Cell(new Position(x, y));
                 cells[x][y] = cell;
 
-                add(cell);
+                wrapper.add(cell);
             }
         }
 
-        firstPlayer = new Player(new Position(4, 0), Color.red);
-        secondPlayer = new Player(new Position(4, 8), Color.blue);
+        firstPlayer = new Player(cells[0][4], Color.red);
+        secondPlayer = new Player(cells[8][4], Color.blue);
+
+        add(secondPlayer);
+        add(firstPlayer);
+        add(wrapper);
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
@@ -68,13 +76,6 @@ public class Cells extends JPanel {
         for (Wall wall : walls) {
             drawWall(wall, g);
         }
-
-        drawPlayer(firstPlayer);
-        drawPlayer(secondPlayer);
-    }
-
-    private void drawPlayer(Player player) {
-
     }
 
     private void drawWall(Wall wall, Graphics g) {
@@ -98,5 +99,19 @@ public class Cells extends JPanel {
 
     public void addWall(Wall wall) {
         walls.add(wall);
+    }
+
+    public void movePlayer(Position position, State.Player player) {
+        switch (player) {
+            case First: {
+                firstPlayer.setCell(cells[position.x][position.y]);
+                break;
+            }
+
+            case Second: {
+                secondPlayer.setCell(cells[position.x][position.y]);
+                break;
+            }
+        }
     }
 }

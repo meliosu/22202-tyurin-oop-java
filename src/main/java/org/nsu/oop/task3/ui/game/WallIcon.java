@@ -15,6 +15,10 @@ public class WallIcon extends JPanel implements Publisher<GameEvent> {
     private Subscriber<GameEvent> subscriber;
 
     public WallIcon(State.Wall type) {
+        super();
+
+        setBackground(Color.lightGray);
+
         this.type = type;
     }
 

@@ -17,6 +17,7 @@ public class GameOver extends JPanel {
         setBackground(Color.red);
 
         menuButton = new Button("Back to Menu");
+        ExitButton exitButton = new ExitButton();
 
         Font font = new Font("Verdana", Font.BOLD, 24);
         winLabel = new JLabel();
@@ -25,6 +26,7 @@ public class GameOver extends JPanel {
 
         add(winLabel);
         add(menuButton);
+        add(exitButton);
     }
 
     public void setWinningPlayer(State.Player winningPlayer) {
