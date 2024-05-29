@@ -13,7 +13,6 @@ public class Player extends JPanel {
         super();
 
         setOpaque(false);
-        setBounds(0, 0, 720, 720);
 
         this.cell = cell;
         this.color = color;

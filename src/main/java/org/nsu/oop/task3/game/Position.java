@@ -1,5 +1,6 @@
 package org.nsu.oop.task3.game;
 
+// need to move to util package
 public class Position {
     public int x;
     public int y;

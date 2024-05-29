@@ -38,12 +38,12 @@ public class Cells extends JPanel {
             }
         }
 
-        firstPlayer = new Player(cells[0][4], Color.red);
-        secondPlayer = new Player(cells[8][4], Color.blue);
+        firstPlayer = new Player(cells[4][0], Color.red);
+        secondPlayer = new Player(cells[4][8], Color.blue);
 
-        add(secondPlayer);
-        add(firstPlayer);
-        add(wrapper);
+        add(secondPlayer, 0);
+        add(firstPlayer, 1);
+        add(wrapper, 2);
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
@@ -76,6 +76,9 @@ public class Cells extends JPanel {
         for (Wall wall : walls) {
             drawWall(wall, g);
         }
+
+        firstPlayer.paintComponent(g);
+        secondPlayer.paintComponent(g);
     }
 
     private void drawWall(Wall wall, Graphics g) {
@@ -105,11 +108,13 @@ public class Cells extends JPanel {
         switch (player) {
             case First: {
                 firstPlayer.setCell(cells[position.x][position.y]);
+                firstPlayer.repaint();
                 break;
             }
 
             case Second: {
                 secondPlayer.setCell(cells[position.x][position.y]);
+                secondPlayer.repaint();
                 break;
             }
         }

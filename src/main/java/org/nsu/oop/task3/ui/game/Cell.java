@@ -2,6 +2,7 @@ package org.nsu.oop.task3.ui.game;
 
 import org.nsu.oop.task3.controller.events.GameEvent;
 import org.nsu.oop.task3.controller.events.MoveEvent;
+import org.nsu.oop.task3.controller.pubsub.Publisher;
 import org.nsu.oop.task3.controller.pubsub.Subscriber;
 import org.nsu.oop.task3.game.Position;
 
@@ -10,7 +11,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Cell extends JPanel {
+public class Cell extends JPanel implements Publisher<GameEvent> {
     private static final Color normalColor = Color.darkGray;
     private static final Color highlightColor = Color.green;
 
@@ -29,8 +30,7 @@ public class Cell extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (subscriber != null) subscriber.handleEvent(new MoveEvent(position));
-
+                publishEvent(new MoveEvent(position));
             }
         });
 
@@ -57,5 +57,10 @@ public class Cell extends JPanel {
 
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void publishEvent(GameEvent event) {
+        subscriber.handleEvent(event);
     }
 }

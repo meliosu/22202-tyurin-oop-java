@@ -127,7 +127,7 @@ public class State {
         return hasCollisions;
     }
 
-    private Player winningPlayer() {
+    public Player winningPlayer() {
         if (firstPlayerPos.y == 8) {
             return Player.First;
         } else if (secondPlayerPos.y == 0) {
@@ -176,19 +176,20 @@ public class State {
             positions.add(new Position(pos.x, pos.y + 1));
         }
 
+        System.out.println("adjacent: " + positions.size());
+
         return positions;
     }
 
-    // need to invert
     private boolean hasWallBetween(Position first, Position second) {
         if (first.x == second.x) {
             int x = first.x;
             int y = Math.min(first.y, second.y);
-            return (x == 0 || walls[x - 1][y] == Wall.Horizontal) || (x == 8 || walls[x][y] == Wall.Horizontal);
+            return (x != 0 && walls[x - 1][y] == Wall.Horizontal) || (x != 8 && walls[x][y] == Wall.Horizontal);
         } else {
             int x = Math.min(first.x, second.x);
             int y = first.y;
-            return (y == 0 || walls[x][y - 1] == Wall.Vertical) || (y == 8 || walls[x][y] == Wall.Vertical);
+            return (y != 0 && walls[x][y - 1] == Wall.Vertical) || (y != 8 && walls[x][y] == Wall.Vertical);
         }
     }
 
@@ -216,9 +217,11 @@ public class State {
     public void move(Position pos) throws IllegalMoveException {
         ArrayList<Position> adjacent = adjacentCells(pos);
 
-        if (!adjacent.contains(pos)) {
-            throw new IllegalMoveException();
-        }
+
+
+//        if (!adjacent.contains(pos)) {
+//            throw new IllegalMoveException();
+//        }
 
         switch (currentPlayer) {
             case First: {
@@ -242,5 +245,9 @@ public class State {
         } else {
             return adjacentCells(secondPlayerPos);
         }
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 }

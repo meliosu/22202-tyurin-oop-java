@@ -2,6 +2,7 @@ package org.nsu.oop.task3.ui;
 
 import org.nsu.oop.task3.controller.events.GameEvent;
 import org.nsu.oop.task3.controller.events.StartGameEvent;
+import org.nsu.oop.task3.controller.pubsub.Publisher;
 import org.nsu.oop.task3.controller.pubsub.Subscriber;
 import org.nsu.oop.task3.game.Position;
 import org.nsu.oop.task3.game.State;
@@ -14,10 +15,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class View extends JFrame implements Subscriber<GameEvent> {
+public class View extends JFrame implements Subscriber<GameEvent>, Publisher<GameEvent> {
     private final MainView mainView;
     private final GameOver gameOver;
     private final GameMenu menu;
+
+    private Subscriber<GameEvent> subscriber;
 
     public View() {
         super();
@@ -42,7 +45,10 @@ public class View extends JFrame implements Subscriber<GameEvent> {
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
+        this.subscriber = subscriber;
         mainView.addSubscriber(subscriber);
+        gameOver.addSubscriber(subscriber);
+
 
         // maybe need to add others
     }
@@ -71,6 +77,12 @@ public class View extends JFrame implements Subscriber<GameEvent> {
         if (event instanceof StartGameEvent) {
             menu.setVisible(false);
             mainView.setVisible(true);
+            publishEvent(event);
         }
+    }
+
+    @Override
+    public void publishEvent(GameEvent event) {
+        subscriber.handleEvent(event);
     }
 }
