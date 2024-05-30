@@ -85,4 +85,8 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     public void publishEvent(GameEvent event) {
         subscriber.handleEvent(event);
     }
+
+    public void updateWallCount(State.Player player, int count) {
+        mainView.updateWallCount(player, count);
+    }
 }

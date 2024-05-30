@@ -31,10 +31,16 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getX() < 15) {
-                    publishEvent(new WallPlacementEvent(position, State.Wall.Horizontal));
-                } else if (e.getY() < 15) {
+                Position fixedPosition = new Position(position.x - 1, position.y - 1);
+
+                if (e.getX() < 10) {
+                    publishEvent(new WallPlacementEvent(fixedPosition, State.Wall.Horizontal));
+                } else if (e.getY() < 10) {
+                    publishEvent(new WallPlacementEvent(fixedPosition, State.Wall.Vertical));
+                } else if (getHeight() - e.getY() < 10) {
                     publishEvent(new WallPlacementEvent(position, State.Wall.Vertical));
+                } else if (getWidth() - e.getX() < 10) {
+                    publishEvent(new WallPlacementEvent(position, State.Wall.Horizontal));
                 } else {
                     publishEvent(new MoveEvent(position));
                 }

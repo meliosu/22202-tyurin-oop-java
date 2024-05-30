@@ -56,7 +56,7 @@ public class GameInfo extends JPanel {
         }
     }
 
-    private void setWallCount(State.Player player, int count) {
+    public void setWallCount(State.Player player, int count) {
         switch (player) {
             case First: {
                 firstPlayerCount.setText(String.valueOf(count));

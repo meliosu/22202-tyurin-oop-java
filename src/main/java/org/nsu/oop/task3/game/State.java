@@ -34,7 +34,7 @@ public class State {
     private int firstPlayerWalls;
     private int secondPlayerWalls;
 
-    private final Wall[][] walls;
+    private Wall[][] walls;
 
     public State() {
         currentPlayer = Player.First;
@@ -56,17 +56,30 @@ public class State {
         }
     }
 
+    public void reset() {
+        currentPlayer = Player.First;
+        firstPlayerPos = new Position(4, 0);
+        secondPlayerPos = new Position(4, 8);
+        firstPlayerWalls = 10;
+        secondPlayerWalls = 10;
+        walls = new Wall[8][8];
+    }
+
     public void placeWall(Wall wall, int x, int y) throws IllegalWallException {
+        if (x < 0 || y < 0 || x > 7 || y > 7) {
+            throw new IllegalWallException("Can't place walls on border!");
+        }
+
         if (!enoughWalls()) {
             throw new IllegalWallException("No walls left!");
         }
 
         if (walls[x][y] != null) {
-            throw new IllegalWallException();
+            throw new IllegalWallException("Already has a wall");
         }
 
         if (hasCollisions(wall, x, y)) {
-            throw new IllegalWallException();
+            throw new IllegalWallException("Collides!");
         }
 
         walls[x][y] = wall;
@@ -139,10 +152,8 @@ public class State {
 
     // bfs for possible paths to victory
     private boolean isLegalPosition() {
-        HashSet<Position> visitedCells = new HashSet<>();
-
-        return isReachable(firstPlayerPos, 8, visitedCells) &&
-                isReachable(secondPlayerPos, 0, visitedCells);
+        return isReachable(firstPlayerPos, 8, new HashSet<>()) &&
+                isReachable(secondPlayerPos, 0, new HashSet<>());
     }
 
     private ArrayList<Position> adjacentCells(Position pos) {
@@ -176,8 +187,6 @@ public class State {
         if (pos.y != 8) {
             positions.add(new Position(pos.x, pos.y + 1));
         }
-
-        System.out.println("adjacent: " + positions.size());
 
         return positions;
     }
@@ -225,7 +234,6 @@ public class State {
         }
 
         if (!adjacent.contains(pos)) {
-            System.out.println("none contains");
             throw new IllegalMoveException();
         }
 
@@ -255,5 +263,13 @@ public class State {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public int getCurrentPlayerWallCount() {
+        if (currentPlayer == Player.First) {
+            return firstPlayerWalls;
+        } else {
+            return secondPlayerWalls;
+        }
     }
 }

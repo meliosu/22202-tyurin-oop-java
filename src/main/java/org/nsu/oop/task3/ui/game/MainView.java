@@ -6,7 +6,6 @@ import org.nsu.oop.task3.game.Position;
 import org.nsu.oop.task3.game.State;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class MainView extends JPanel {
     public static final int height = 720;
@@ -38,5 +37,9 @@ public class MainView extends JPanel {
 
     public void movePlayer(Position position, State.Player player) {
         cells.movePlayer(position, player);
+    }
+
+    public void updateWallCount(State.Player player, int count) {
+        info.setWallCount(player, count);
     }
 }
