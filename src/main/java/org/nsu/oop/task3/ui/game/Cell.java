@@ -2,9 +2,11 @@ package org.nsu.oop.task3.ui.game;
 
 import org.nsu.oop.task3.controller.events.GameEvent;
 import org.nsu.oop.task3.controller.events.MoveEvent;
+import org.nsu.oop.task3.controller.events.WallPlacementEvent;
 import org.nsu.oop.task3.controller.pubsub.Publisher;
 import org.nsu.oop.task3.controller.pubsub.Subscriber;
 import org.nsu.oop.task3.game.Position;
+import org.nsu.oop.task3.game.State;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -21,7 +23,6 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
 
     public Cell(Position position) {
         super();
-
         this.position = position;
 
         setBorder(new LineBorder(Color.black, 2));
@@ -30,17 +31,15 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                publishEvent(new MoveEvent(position));
+                if (e.getX() < 15) {
+                    publishEvent(new WallPlacementEvent(position, State.Wall.Horizontal));
+                } else if (e.getY() < 15) {
+                    publishEvent(new WallPlacementEvent(position, State.Wall.Vertical));
+                } else {
+                    publishEvent(new MoveEvent(position));
+                }
             }
         });
-
-        if (position.x == 0) {
-            setBackground(Color.yellow);
-        }
-
-        if (position.y == 0) {
-            setBackground(Color.blue);
-        }
     }
 
     public void highlight() {

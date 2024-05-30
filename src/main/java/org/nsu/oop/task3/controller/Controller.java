@@ -58,15 +58,23 @@ public class Controller implements Publisher<GameEvent>, Subscriber<GameEvent> {
 
     private void handleWallPlacementEvent(WallPlacementEvent event) {
         try {
+            int wallCount = state.getCurrentPlayerWallCount();
+            State.Player player = state.getCurrentPlayer();
+
             state.placeWall(event.type, event.position.x, event.position.y);
             view.placeWall(new Wall(event.position, event.type));
-        } catch (IllegalWallException ignored) {}
+            view.updateWallCount(player, wallCount - 1);
+
+            ArrayList<Position> legalMoves = state.legalMoves();
+            view.highlightMoves(legalMoves);
+        } catch (IllegalWallException e) {
+            System.out.println("unable to place wall: " + e.getMessage());
+        }
     }
 
     private void handleStartGameEvent(StartGameEvent event) {
+        state.reset();
         ArrayList<Position> legalMoves = state.legalMoves();
-        System.out.println(legalMoves.size());
-
         view.highlightMoves(legalMoves);
     }
 }

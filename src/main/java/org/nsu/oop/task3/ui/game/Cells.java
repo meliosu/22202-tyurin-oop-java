@@ -18,7 +18,8 @@ public class Cells extends JPanel {
     public Cells() {
         super();
 
-        setLayout(new OverlayLayout(this));
+        OverlayLayout layout = new OverlayLayout(this);
+        setLayout(layout);
 
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new GridLayout(9, 9));
@@ -41,9 +42,9 @@ public class Cells extends JPanel {
         firstPlayer = new Player(cells[4][0], Color.red);
         secondPlayer = new Player(cells[4][8], Color.blue);
 
-        add(secondPlayer, 0);
-        add(firstPlayer, 1);
-        add(wrapper, 2);
+        add(secondPlayer);
+        add(firstPlayer);
+        add(wrapper);
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
@@ -70,22 +71,27 @@ public class Cells extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void paint(Graphics g) {
+        super.paint(g);
 
         for (Wall wall : walls) {
+            System.out.println("drawing wall!");
+
             drawWall(wall, g);
         }
 
-        firstPlayer.paintComponent(g);
-        secondPlayer.paintComponent(g);
+        firstPlayer.paint(g);
+        secondPlayer.paint(g);
     }
 
     private void drawWall(Wall wall, Graphics g) {
-        int x = (getWidth() / 9) * (wall.getPosition().x + 1);
-        int y = (getHeight() / 9) * (wall.getPosition().y + 1);
+        int x = (getWidth() / 9) * (wall.getPosition().y + 1);
+        int y = (getHeight() / 9) * (wall.getPosition().x + 1);
         int dim1 = 10;
         int dim2 = 2 * getWidth() / 9;
+
+        g.setPaintMode();
+        g.setColor(Color.yellow);
 
         switch (wall.getType()) {
             case Horizontal: {
@@ -102,21 +108,22 @@ public class Cells extends JPanel {
 
     public void addWall(Wall wall) {
         walls.add(wall);
+        updateUI();
     }
 
     public void movePlayer(Position position, State.Player player) {
         switch (player) {
             case First: {
                 firstPlayer.setCell(cells[position.x][position.y]);
-                firstPlayer.repaint();
                 break;
             }
 
             case Second: {
                 secondPlayer.setCell(cells[position.x][position.y]);
-                secondPlayer.repaint();
                 break;
             }
         }
+
+        updateUI();
     }
 }
