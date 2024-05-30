@@ -149,7 +149,8 @@ public class State {
         ArrayList<Position> cells = new ArrayList<>();
 
         for (Position neighbor : adjacentPositions(pos)) {
-            if (!hasWallBetween(pos, neighbor)) {
+            if (!hasWallBetween(pos, neighbor)
+                    && !firstPlayerPos.equals(neighbor) && !secondPlayerPos.equals(neighbor)) {
                 cells.add(neighbor);
             }
         }
@@ -215,13 +216,18 @@ public class State {
 
     // need to add moves to non-adjacent cells (when the opponent is near)
     public void move(Position pos) throws IllegalMoveException {
-        ArrayList<Position> adjacent = adjacentCells(pos);
+        ArrayList<Position> adjacent;
 
+        if (currentPlayer == Player.First) {
+            adjacent = adjacentCells(firstPlayerPos);
+        } else {
+            adjacent = adjacentCells(secondPlayerPos);
+        }
 
-
-//        if (!adjacent.contains(pos)) {
-//            throw new IllegalMoveException();
-//        }
+        if (!adjacent.contains(pos)) {
+            System.out.println("none contains");
+            throw new IllegalMoveException();
+        }
 
         switch (currentPlayer) {
             case First: {
