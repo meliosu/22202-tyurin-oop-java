@@ -20,27 +20,25 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
 
     private Subscriber<GameEvent> subscriber;
 
-    public Cell(Position position) {
+    public Cell(Position pos) {
         setBorder(new LineBorder(Color.black, 2));
         setBackground(Color.darkGray);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Position fixedPosition = new Position(position.x - 1, position.y - 1);
                 GameEvent event;
 
                 if (e.getX() < clickThreshold) {
-                    event = new WallPlacementEvent(fixedPosition, WallType.Horizontal);
+                    event = new WallPlacementEvent(new Position(pos.x, pos.y - 1), WallType.Horizontal);
                 } else if (e.getY() < clickThreshold) {
-                    event = new WallPlacementEvent(fixedPosition, WallType.Vertical);
+                    event = new WallPlacementEvent(new Position(pos.x - 1, pos.y), WallType.Vertical);
                 } else if (getHeight() - e.getY() < clickThreshold) {
-                    event = new WallPlacementEvent(position, WallType.Vertical);
+                    event = new WallPlacementEvent(pos, WallType.Vertical);
                 } else if (getWidth() - e.getX() < clickThreshold) {
-                    event = new WallPlacementEvent(position, WallType.Horizontal);
+                    event = new WallPlacementEvent(pos, WallType.Horizontal);
                 } else {
-                    event = new MoveEvent(position);
-                    publishEvent(new MoveEvent(position));
+                    event = new MoveEvent(pos);
                 }
 
                 publishEvent(event);
