@@ -13,7 +13,6 @@ public class Button extends JButton {
         super(text);
 
         setFont(new Font("Verdana", Font.PLAIN, 24));
-
         setBackground(normalColor);
         setForeground(Color.white);
         setBorder(BorderFactory.createLineBorder(Color.black, 4, true));

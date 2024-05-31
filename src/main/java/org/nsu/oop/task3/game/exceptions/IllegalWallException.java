@@ -4,8 +4,4 @@ public class IllegalWallException extends RuntimeException {
     public IllegalWallException(String message) {
         super(message);
     }
-
-    public IllegalWallException() {
-        this("");
-    }
 }

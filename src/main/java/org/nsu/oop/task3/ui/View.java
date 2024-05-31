@@ -2,10 +2,10 @@ package org.nsu.oop.task3.ui;
 
 import org.nsu.oop.task3.controller.events.GameEvent;
 import org.nsu.oop.task3.controller.events.StartGameEvent;
-import org.nsu.oop.task3.controller.pubsub.Publisher;
-import org.nsu.oop.task3.controller.pubsub.Subscriber;
-import org.nsu.oop.task3.game.Position;
-import org.nsu.oop.task3.game.State;
+import org.nsu.oop.task3.pubsub.Publisher;
+import org.nsu.oop.task3.pubsub.Subscriber;
+import org.nsu.oop.task3.util.Player;
+import org.nsu.oop.task3.util.Position;
 import org.nsu.oop.task3.ui.game.MainView;
 import org.nsu.oop.task3.ui.game.Wall;
 import org.nsu.oop.task3.ui.menu.GameMenu;
@@ -16,6 +16,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class View extends JFrame implements Subscriber<GameEvent>, Publisher<GameEvent> {
+    private static final Dimension viewSize = new Dimension(1200, 720);
+
     private final MainView mainView;
     private final GameOver gameOver;
     private final GameMenu menu;
@@ -23,37 +25,29 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     private Subscriber<GameEvent> subscriber;
 
     public View() {
-        super();
         setTitle("Quoridor");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(new Dimension(1200, 720));
+        setSize(viewSize);
         setResizable(false);
+        setLayout(new CardLayout());
 
         mainView = new MainView();
         gameOver = new GameOver();
         menu = new GameMenu();
-
         menu.addSubscriber(this);
-
-        setLayout(new CardLayout());
 
         add(menu);
         add(gameOver);
         add(mainView);
-
-        setVisible(true);
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
         this.subscriber = subscriber;
         mainView.addSubscriber(subscriber);
         gameOver.addSubscriber(subscriber);
-
-
-        // maybe need to add others
     }
 
-    public void gameOver(State.Player winningPlayer) {
+    public void gameOver(Player winningPlayer) {
         mainView.setVisible(false);
         gameOver.setWinningPlayer(winningPlayer);
         gameOver.setVisible(true);
@@ -63,14 +57,33 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
         mainView.placeWall(wall);
     }
 
-    public void movePlayer(Position position, State.Player player) {
+    public void movePlayer(Position position, Player player) {
         mainView.movePlayer(position, player);
     }
 
     public void highlightMoves(ArrayList<Position> moves) {
-        mainView.cells.highlightCells(moves);
+        mainView.grid.highlightCells(moves);
     }
 
+    public void showMainView() {
+        mainView.setVisible(true);
+        gameOver.setVisible(false);
+        menu.setVisible(false);
+    }
+
+    public void showMenu() {
+        mainView.setVisible(false);
+        gameOver.setVisible(false);
+        menu.setVisible(true);
+    }
+
+    public void reset() {
+        mainView.reset();
+    }
+
+    public void updateWallCount(Player player, int count) {
+        mainView.updateWallCount(player, count);
+    }
 
     @Override
     public void handleEvent(GameEvent event) {
@@ -86,7 +99,7 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
         subscriber.handleEvent(event);
     }
 
-    public void updateWallCount(State.Player player, int count) {
-        mainView.updateWallCount(player, count);
+    public void start() {
+        setVisible(true);
     }
 }

@@ -1,40 +1,36 @@
 package org.nsu.oop.task3.ui.game;
 
 import org.nsu.oop.task3.controller.events.GameEvent;
-import org.nsu.oop.task3.controller.pubsub.Subscriber;
-import org.nsu.oop.task3.game.Position;
-import org.nsu.oop.task3.game.State;
+import org.nsu.oop.task3.pubsub.Subscriber;
+import org.nsu.oop.task3.util.Position;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Cells extends JPanel {
+public class Grid extends JPanel {
+    private static final Dimension gridSize = new Dimension(720, 720);
+
     private final Cell[][] cells;
-    private final ArrayList<Wall> walls = new ArrayList<>();
     private final Player firstPlayer;
     private final Player secondPlayer;
+    private ArrayList<Wall> walls = new ArrayList<>();
 
-    public Cells() {
-        super();
+    public Grid() {
+        setMaximumSize(gridSize);
+        setMinimumSize(gridSize);
+        setPreferredSize(gridSize);
 
-        OverlayLayout layout = new OverlayLayout(this);
-        setLayout(layout);
+        setLayout(new OverlayLayout(this));
 
         JPanel wrapper = new JPanel();
         wrapper.setLayout(new GridLayout(9, 9));
-
-        // need to remove
-        setMaximumSize(new Dimension(720, 720));
-        setMinimumSize(new Dimension(720, 720));
-        setPreferredSize(new Dimension(720, 720));
 
         cells = new Cell[9][9];
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {
                 Cell cell = new Cell(new Position(x, y));
                 cells[x][y] = cell;
-
                 wrapper.add(cell);
             }
         }
@@ -48,17 +44,17 @@ public class Cells extends JPanel {
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
-        for (int x = 0; x < cells.length; x++) {
+        for (Cell[] cell : cells) {
             for (int y = 0; y < cells.length; y++) {
-                cells[x][y].addSubscriber(subscriber);
+                cell[y].addSubscriber(subscriber);
             }
         }
     }
 
     private void clearHighlights() {
-        for (int x = 0; x < cells.length; x++) {
+        for (Cell[] cell : cells) {
             for (int y = 0; y < cells.length; y++) {
-                cells[x][y].restore();
+                cell[y].dehighlight();
             }
         }
     }
@@ -75,13 +71,8 @@ public class Cells extends JPanel {
         super.paint(g);
 
         for (Wall wall : walls) {
-            System.out.println("drawing wall!");
-
             drawWall(wall, g);
         }
-
-        firstPlayer.paint(g);
-        secondPlayer.paint(g);
     }
 
     private void drawWall(Wall wall, Graphics g) {
@@ -90,7 +81,6 @@ public class Cells extends JPanel {
         int dim1 = 10;
         int dim2 = 2 * getWidth() / 9;
 
-        g.setPaintMode();
         g.setColor(Color.yellow);
 
         switch (wall.getType()) {
@@ -111,7 +101,7 @@ public class Cells extends JPanel {
         updateUI();
     }
 
-    public void movePlayer(Position position, State.Player player) {
+    public void movePlayer(Position position, org.nsu.oop.task3.util.Player player) {
         switch (player) {
             case First: {
                 firstPlayer.setCell(cells[position.x][position.y]);
@@ -125,5 +115,14 @@ public class Cells extends JPanel {
         }
 
         updateUI();
+    }
+
+    public void resetWalls() {
+        walls = new ArrayList<>();
+    }
+
+    public void resetPlayers() {
+        firstPlayer.setCell(cells[4][0]);
+        secondPlayer.setCell(cells[4][8]);
     }
 }

@@ -11,5 +11,6 @@ public class App {
         Controller controller = new Controller(state, view);
 
         view.addSubscriber(controller);
+        view.start();
     }
 }

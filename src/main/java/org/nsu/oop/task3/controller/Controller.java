@@ -1,9 +1,9 @@
 package org.nsu.oop.task3.controller;
 
 import org.nsu.oop.task3.controller.events.*;
-import org.nsu.oop.task3.controller.pubsub.Publisher;
-import org.nsu.oop.task3.controller.pubsub.Subscriber;
-import org.nsu.oop.task3.game.Position;
+import org.nsu.oop.task3.pubsub.Subscriber;
+import org.nsu.oop.task3.util.Player;
+import org.nsu.oop.task3.util.Position;
 import org.nsu.oop.task3.game.State;
 import org.nsu.oop.task3.game.exceptions.IllegalMoveException;
 import org.nsu.oop.task3.game.exceptions.IllegalWallException;
@@ -12,7 +12,7 @@ import org.nsu.oop.task3.ui.game.Wall;
 
 import java.util.ArrayList;
 
-public class Controller implements Publisher<GameEvent>, Subscriber<GameEvent> {
+public class Controller implements Subscriber<GameEvent> {
     private final State state;
     private final View view;
 
@@ -22,34 +22,25 @@ public class Controller implements Publisher<GameEvent>, Subscriber<GameEvent> {
     }
 
     @Override
-    public void publishEvent(GameEvent event) {
-        if (event instanceof GameOverEvent) {
-
-        }
-    }
-
-    @Override
     public void handleEvent(GameEvent event) {
         if (event instanceof MoveEvent) {
             handleMoveEvent((MoveEvent) event);
         } else if (event instanceof WallPlacementEvent) {
             handleWallPlacementEvent((WallPlacementEvent) event);
         } else if (event instanceof StartGameEvent) {
-            handleStartGameEvent((StartGameEvent) event);
+            handleStartGameEvent();
+        } else if (event instanceof BackToMenuEvent) {
+            handleBackToMenuEvent();
         }
     }
 
     private void handleMoveEvent(MoveEvent event) {
         try {
-            State.Player currentPlayer = state.getCurrentPlayer();
+            Player currentPlayer = state.getCurrentPlayer();
             state.move(event.position);
             view.movePlayer(event.position, currentPlayer);
-
-            ArrayList<Position> legalMoves = state.legalMoves();
-            view.highlightMoves(legalMoves);
-        } catch (IllegalMoveException e) {
-            System.out.println("illegal move");
-        }
+            highlightLegalMoves();
+        } catch (IllegalMoveException ignored) {}
 
         if (state.winningPlayer() != null) {
             view.gameOver(state.winningPlayer());
@@ -57,23 +48,31 @@ public class Controller implements Publisher<GameEvent>, Subscriber<GameEvent> {
     }
 
     private void handleWallPlacementEvent(WallPlacementEvent event) {
+        int wallCount = state.getCurrentPlayerWallCount();
+        Player player = state.getCurrentPlayer();
+
         try {
-            int wallCount = state.getCurrentPlayerWallCount();
-            State.Player player = state.getCurrentPlayer();
-
-            state.placeWall(event.type, event.position.x, event.position.y);
-            view.placeWall(new Wall(event.position, event.type));
+            state.placeWall(event.wallType, event.wallPosition.x, event.wallPosition.y);
+            view.placeWall(new Wall(event.wallPosition, event.wallType));
             view.updateWallCount(player, wallCount - 1);
-
-            ArrayList<Position> legalMoves = state.legalMoves();
-            view.highlightMoves(legalMoves);
+            highlightLegalMoves();
         } catch (IllegalWallException e) {
-            System.out.println("unable to place wall: " + e.getMessage());
+            System.err.println("unable to place wall: " + e.getMessage());
         }
     }
 
-    private void handleStartGameEvent(StartGameEvent event) {
+    private void handleStartGameEvent() {
         state.reset();
+        view.reset();
+        view.showMainView();
+        highlightLegalMoves();
+    }
+
+    private void handleBackToMenuEvent() {
+        view.showMenu();
+    }
+
+    private void highlightLegalMoves() {
         ArrayList<Position> legalMoves = state.legalMoves();
         view.highlightMoves(legalMoves);
     }

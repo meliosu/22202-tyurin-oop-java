@@ -1,4 +1,4 @@
-package org.nsu.oop.task3.controller.pubsub;
+package org.nsu.oop.task3.pubsub;
 
 public interface Publisher <T> {
     void publishEvent(T event);

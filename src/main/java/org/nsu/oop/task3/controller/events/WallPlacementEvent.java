@@ -1,14 +1,14 @@
 package org.nsu.oop.task3.controller.events;
 
-import org.nsu.oop.task3.game.Position;
-import org.nsu.oop.task3.game.State;
+import org.nsu.oop.task3.util.Position;
+import org.nsu.oop.task3.util.WallType;
 
 public class WallPlacementEvent extends GameEvent {
-    public final Position position;
-    public final State.Wall type;
+    public final Position wallPosition;
+    public final WallType wallType;
 
-    public WallPlacementEvent(Position position, State.Wall type) {
-        this.position = position;
-        this.type = type;
+    public WallPlacementEvent(Position wallPosition, WallType wallType) {
+        this.wallPosition = wallPosition;
+        this.wallType = wallType;
     }
 }
