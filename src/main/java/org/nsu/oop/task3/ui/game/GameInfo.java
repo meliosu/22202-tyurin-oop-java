@@ -35,7 +35,7 @@ public class GameInfo extends JPanel {
     }
 
     private JLabel createWallCountLabel() {
-        JLabel label = new JLabel("10");
+        JLabel label = new JLabel("10", SwingConstants.CENTER);
         Font font = new Font("Verdana", Font.BOLD, 80);
         label.setFont(font);
         label.setForeground(Color.orange);

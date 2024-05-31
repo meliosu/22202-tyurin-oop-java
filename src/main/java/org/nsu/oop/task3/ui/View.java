@@ -16,7 +16,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class View extends JFrame implements Subscriber<GameEvent>, Publisher<GameEvent> {
-    private static final Dimension viewSize = new Dimension(1200, 720);
+    private static final Dimension viewSize = new Dimension(1000, 720);
 
     private final MainView mainView;
     private final GameOver gameOver;

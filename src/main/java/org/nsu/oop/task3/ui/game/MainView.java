@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class MainView extends JPanel {
     public final Grid grid;
-    private final GameInfo info;
+    public final GameInfo info;
 
     public MainView() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
