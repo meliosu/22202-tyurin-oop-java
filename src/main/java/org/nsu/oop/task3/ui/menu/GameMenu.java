@@ -15,7 +15,7 @@ public class GameMenu extends JPanel implements Publisher<GameEvent> {
 
     public GameMenu() {
         setBackground(Color.red);
-        setLayout(new FlowLayout(FlowLayout.CENTER, 100, 100));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 100, 240));
 
         Button multi = new Button("Multiplayer");
         multi.addMouseListener(new MouseAdapter() {

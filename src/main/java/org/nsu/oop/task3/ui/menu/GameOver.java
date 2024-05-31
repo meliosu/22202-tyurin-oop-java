@@ -16,8 +16,12 @@ public class GameOver extends JPanel {
     private Subscriber<GameEvent> subscriber;
 
     public GameOver() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 100, 100));
+        setLayout(new GridLayout(2, 1));
         setBackground(Color.red);
+
+        JPanel wrapper = new JPanel();
+        wrapper.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 60));
+        wrapper.setBackground(Color.red);
 
         Button menuButton = new Button("Back to Menu");
         menuButton.addMouseListener(new MouseAdapter() {
@@ -29,14 +33,16 @@ public class GameOver extends JPanel {
 
         ExitButton exitButton = new ExitButton();
 
-        Font font = new Font("Verdana", Font.BOLD, 24);
-        winLabel = new JLabel();
+        Font font = new Font("Verdana", Font.BOLD, 32);
+        winLabel = new JLabel("", SwingConstants.CENTER);
         winLabel.setFont(font);
         winLabel.setForeground(Color.white);
 
         add(winLabel);
-        add(menuButton);
-        add(exitButton);
+
+        wrapper.add(menuButton);
+        wrapper.add(exitButton);
+        add(wrapper);
     }
 
     public void setWinningPlayer(Player winningPlayer) {
