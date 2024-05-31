@@ -39,7 +39,7 @@ public class GameInfo extends JPanel {
         Font font = new Font("Verdana", Font.BOLD, 80);
         label.setFont(font);
         label.setForeground(Color.orange);
-        label.setBorder(BorderFactory.createLineBorder(Color.pink, 6, false));
+        label.setBorder(BorderFactory.createLineBorder(Color.magenta, 6, false));
         return label;
     }
 }
