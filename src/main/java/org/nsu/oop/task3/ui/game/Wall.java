@@ -1,13 +1,13 @@
 package org.nsu.oop.task3.ui.game;
 
-import org.nsu.oop.task3.game.Position;
-import org.nsu.oop.task3.game.State;
+import org.nsu.oop.task3.util.Position;
+import org.nsu.oop.task3.util.WallType;
 
 public class Wall {
     private final Position position;
-    private final State.Wall type;
+    private final WallType type;
 
-    public Wall(Position position, State.Wall type) {
+    public Wall(Position position, WallType type) {
         this.position = position;
         this.type = type;
     }
@@ -16,7 +16,7 @@ public class Wall {
         return position;
     }
 
-    public State.Wall getType() {
+    public WallType getType() {
         return type;
     }
 }
