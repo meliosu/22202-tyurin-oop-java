@@ -8,29 +8,29 @@ import org.nsu.oop.task3.util.Position;
 import javax.swing.*;
 
 public class MainView extends JPanel {
-    public final Grid grid;
     public final GameInfo info;
+    public final PlayingField field;
 
     public MainView() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        grid = new Grid();
+        field = new PlayingField();
         info = new GameInfo();
 
-        add(grid);
+        add(field);
         add(info);
     }
 
     public void placeWall(Wall wall) {
-        grid.addWall(wall);
+        field.addWall(wall);
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
-        grid.addSubscriber(subscriber);
+        field.addSubscriber(subscriber);
     }
 
     public void movePlayer(Position position, Player player) {
-        grid.movePlayer(position, player);
+        field.movePlayer(position, player);
     }
 
     public void updateWallCount(Player player, int count) {
@@ -38,8 +38,8 @@ public class MainView extends JPanel {
     }
 
     public void reset() {
-        grid.resetWalls();
-        grid.resetPlayers();
+        field.resetWalls();
+        field.resetPlayers();
         info.setWallCount(Player.First, 10);
         info.setWallCount(Player.Second, 10);
     }

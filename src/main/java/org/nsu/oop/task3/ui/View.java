@@ -62,7 +62,7 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     }
 
     public void highlightMoves(ArrayList<Position> moves) {
-        mainView.grid.highlightCells(moves);
+        mainView.field.highlightCells(moves);
     }
 
     public void showMainView() {
