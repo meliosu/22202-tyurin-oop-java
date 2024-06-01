@@ -46,6 +46,6 @@ public class FactoryConfig {
     }
 
     public FactoryConfig() {
-        this("/factory.cfg");
+        this("/carFactory.cfg");
     }
 }
