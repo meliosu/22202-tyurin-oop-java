@@ -117,10 +117,6 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
                 passedEvent = new WallPlacementEvent(new Position(pos.x, pos.y - 1), WallType.Horizontal);
             } else if (mouseEvent.getY() < clickThreshold) {
                 passedEvent = new WallPlacementEvent(new Position(pos.x - 1, pos.y), WallType.Vertical);
-            } else if (getHeight() - mouseEvent.getY() < clickThreshold) {
-                passedEvent = new WallPlacementEvent(pos, WallType.Vertical);
-            } else if (getWidth() - mouseEvent.getX() < clickThreshold) {
-                passedEvent = new WallPlacementEvent(pos, WallType.Horizontal);
             } else {
                 passedEvent = new MoveEvent(pos);
             }
