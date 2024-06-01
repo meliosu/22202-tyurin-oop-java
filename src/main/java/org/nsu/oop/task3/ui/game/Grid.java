@@ -6,12 +6,14 @@ import org.nsu.oop.task3.util.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class Grid extends JPanel {
     private static final Dimension gridDimension = new Dimension(720, 720);
 
     private final Cell[][] cells;
+    private final int size;
 
     public Grid(int size) {
         setMaximumSize(gridDimension);
@@ -28,6 +30,8 @@ public class Grid extends JPanel {
                 add(cell);
             }
         }
+
+        this.size = size;
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
@@ -57,5 +61,14 @@ public class Grid extends JPanel {
         Cell cell = cells[position.x][position.y];
         g.setColor(color);
         g.fillOval(cell.getX(), cell.getY(), cell.getWidth(), cell.getHeight());
+    }
+
+    @Override
+    public synchronized void addMouseListener(MouseListener l) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                cells[i][j].addMouseListener(l);
+            }
+        }
     }
 }

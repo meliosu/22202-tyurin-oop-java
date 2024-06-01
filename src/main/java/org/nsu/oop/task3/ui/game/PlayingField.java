@@ -1,24 +1,32 @@
 package org.nsu.oop.task3.ui.game;
 
+import org.nsu.oop.task3.controller.events.ClickEvent;
 import org.nsu.oop.task3.controller.events.GameEvent;
+import org.nsu.oop.task3.controller.events.MoveEvent;
+import org.nsu.oop.task3.controller.events.WallPlacementEvent;
+import org.nsu.oop.task3.pubsub.Publisher;
 import org.nsu.oop.task3.pubsub.Subscriber;
 import org.nsu.oop.task3.util.Position;
+import org.nsu.oop.task3.util.WallType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class PlayingField extends JPanel {
-    Grid grid;
+public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publisher<GameEvent> {
+    private final Grid grid;
 
     private Position firstPlayerPos;
     private Position secondPlayerPos;
     private ArrayList<Wall> walls = new ArrayList<>();
+    private Subscriber<GameEvent> subscriber;
 
     public PlayingField() {
         setLayout(new OverlayLayout(this));
 
         grid = new Grid(9);
+        grid.addSubscriber(this);
         add(grid);
 
         resetPlayers();
@@ -88,10 +96,41 @@ public class PlayingField extends JPanel {
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
-        grid.addSubscriber(subscriber);
+        this.subscriber = subscriber;
     }
 
     public void highlightCells(ArrayList<Position> cells) {
         grid.highlightCells(cells);
+    }
+
+    @Override
+    public void handleEvent(GameEvent e) {
+        if (e instanceof ClickEvent) {
+            ClickEvent event = (ClickEvent) e;
+            MouseEvent mouseEvent = event.mouseEvent;
+            Position pos = event.position;
+            int clickThreshold = 10;
+
+            GameEvent passedEvent;
+
+            if (mouseEvent.getX() < clickThreshold) {
+                passedEvent = new WallPlacementEvent(new Position(pos.x, pos.y - 1), WallType.Horizontal);
+            } else if (mouseEvent.getY() < clickThreshold) {
+                passedEvent = new WallPlacementEvent(new Position(pos.x - 1, pos.y), WallType.Vertical);
+            } else if (getHeight() - mouseEvent.getY() < clickThreshold) {
+                passedEvent = new WallPlacementEvent(pos, WallType.Vertical);
+            } else if (getWidth() - mouseEvent.getX() < clickThreshold) {
+                passedEvent = new WallPlacementEvent(pos, WallType.Horizontal);
+            } else {
+                passedEvent = new MoveEvent(pos);
+            }
+
+            publishEvent(passedEvent);
+        }
+    }
+
+    @Override
+    public void publishEvent(GameEvent event) {
+        subscriber.handleEvent(event);
     }
 }
