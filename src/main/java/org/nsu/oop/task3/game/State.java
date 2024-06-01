@@ -18,7 +18,7 @@ public class State {
     private int firstPlayerWalls;
     private int secondPlayerWalls;
 
-    private WallType[][] wallTypes;
+    private WallType[][] walls;
 
     public State() {
         reset();
@@ -30,7 +30,7 @@ public class State {
         secondPlayerPos = new Position(4, 8);
         firstPlayerWalls = 10;
         secondPlayerWalls = 10;
-        wallTypes = new WallType[8][8];
+        walls = new WallType[8][8];
     }
 
     public void placeWall(WallType wallType, int x, int y) throws IllegalWallException {
@@ -42,7 +42,7 @@ public class State {
             throw new IllegalWallException("No walls left!");
         }
 
-        if (wallTypes[x][y] != null) {
+        if (walls[x][y] != null) {
             throw new IllegalWallException("Already has a wall");
         }
 
@@ -50,10 +50,10 @@ public class State {
             throw new IllegalWallException("Collides!");
         }
 
-        wallTypes[x][y] = wallType;
+        walls[x][y] = wallType;
 
         if (!isLegalPosition()) {
-            wallTypes[x][y] = null;
+            walls[x][y] = null;
             throw new IllegalWallException("Illegal Wall!");
         }
 
@@ -80,14 +80,14 @@ public class State {
         boolean hasCollisions = false;
         switch (wallType) {
             case Horizontal: {
-                if (x != 0) hasCollisions |= wallTypes[x - 1][y] == WallType.Horizontal;
-                if (x != 7) hasCollisions |= wallTypes[x + 1][y] == WallType.Horizontal;
+                if (x != 0) hasCollisions |= walls[x - 1][y] == WallType.Horizontal;
+                if (x != 7) hasCollisions |= walls[x + 1][y] == WallType.Horizontal;
                 break;
             }
 
             case Vertical: {
-                if (y != 0) hasCollisions |= wallTypes[x][y - 1] == WallType.Vertical;
-                if (y != 7) hasCollisions |= wallTypes[x][y + 1] == WallType.Vertical;
+                if (y != 0) hasCollisions |= walls[x][y - 1] == WallType.Vertical;
+                if (y != 7) hasCollisions |= walls[x][y + 1] == WallType.Vertical;
                 break;
             }
         }
@@ -138,11 +138,11 @@ public class State {
         if (first.x == second.x) {
             int x = first.x;
             int y = Math.min(first.y, second.y);
-            return (x != 0 && wallTypes[x - 1][y] == WallType.Horizontal) || (x != 8 && wallTypes[x][y] == WallType.Horizontal);
+            return (x != 0 && walls[x - 1][y] == WallType.Horizontal) || (x != 8 && walls[x][y] == WallType.Horizontal);
         } else {
             int x = Math.min(first.x, second.x);
             int y = first.y;
-            return (y != 0 && wallTypes[x][y - 1] == WallType.Vertical) || (y != 8 && wallTypes[x][y] == WallType.Vertical);
+            return (y != 0 && walls[x][y - 1] == WallType.Vertical) || (y != 8 && walls[x][y] == WallType.Vertical);
         }
     }
 
