@@ -110,7 +110,7 @@ public class State {
                 isReachable(secondPlayerPos, 0, new HashSet<>());
     }
 
-    private ArrayList<Position> adjacentCells(Position pos) {
+    private ArrayList<Position> movableCells(Position pos) {
         ArrayList<Position> cells = new ArrayList<>();
 
         for (Position neighbor : adjacentPositions(pos)) {
@@ -159,7 +159,7 @@ public class State {
 
         boolean reachable = false;
 
-        for (Position newPos : adjacentCells(pos)) {
+        for (Position newPos : movableCells(pos)) {
             reachable |= isReachable(newPos, rank, visited);
         }
 
@@ -170,9 +170,9 @@ public class State {
         ArrayList<Position> adjacent;
 
         if (currentPlayer == Player.First) {
-            adjacent = adjacentCells(firstPlayerPos);
+            adjacent = movableCells(firstPlayerPos);
         } else {
-            adjacent = adjacentCells(secondPlayerPos);
+            adjacent = movableCells(secondPlayerPos);
         }
 
         if (!adjacent.contains(pos)) {
@@ -196,9 +196,9 @@ public class State {
 
     public ArrayList<Position> legalMoves() {
         if (currentPlayer == Player.First) {
-            return adjacentCells(firstPlayerPos);
+            return movableCells(firstPlayerPos);
         } else {
-            return adjacentCells(secondPlayerPos);
+            return movableCells(secondPlayerPos);
         }
     }
 
