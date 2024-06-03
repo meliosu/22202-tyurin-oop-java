@@ -104,7 +104,7 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
     }
 
     @Override
-    public void handleEvent(GameEvent e) {
+    public void onEvent(GameEvent e) {
         if (e instanceof ClickEvent) {
             ClickEvent event = (ClickEvent) e;
             MouseEvent mouseEvent = event.mouseEvent;
@@ -127,6 +127,6 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
 
     @Override
     public void publishEvent(GameEvent event) {
-        subscriber.handleEvent(event);
+        subscriber.onEvent(event);
     }
 }

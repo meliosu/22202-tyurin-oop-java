@@ -88,7 +88,7 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     }
 
     @Override
-    public void handleEvent(GameEvent event) {
+    public void onEvent(GameEvent event) {
         if (event instanceof StartGameEvent) {
             menu.setVisible(false);
             mainView.setVisible(true);
@@ -98,7 +98,7 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
 
     @Override
     public void publishEvent(GameEvent event) {
-        subscriber.handleEvent(event);
+        subscriber.onEvent(event);
     }
 
     public void start() {

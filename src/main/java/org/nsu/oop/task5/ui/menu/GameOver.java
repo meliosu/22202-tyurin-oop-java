@@ -27,7 +27,7 @@ public class GameOver extends JPanel {
         menuButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                subscriber.handleEvent(new BackToMenuEvent());
+                subscriber.onEvent(new BackToMenuEvent());
             }
         });
 

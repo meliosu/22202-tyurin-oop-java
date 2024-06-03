@@ -8,7 +8,7 @@ import org.nsu.oop.task5.ui.View;
 import org.nsu.oop.task5.ui.game.Wall;
 import org.nsu.oop.task5.util.Player;
 
-public class ClientSideController extends Subscriber {
+public class ClientSideController extends Subscriber implements org.nsu.oop.task5.pubsub.Subscriber<GameEvent> {
     private final View view;
     private final Client client;
 
@@ -16,7 +16,7 @@ public class ClientSideController extends Subscriber {
         this.view = view;
         this.client = client;
 
-        // view.addSubscriber(this);
+        view.addSubscriber(this);
 
         addHandlers();
     }
@@ -84,5 +84,10 @@ public class ClientSideController extends Subscriber {
 //                view.updateWallCount(view.getPlayer(), response.wallCount);
 //            }
 //        });
+    }
+
+    @Override
+    public void onEvent(GameEvent event) {
+        handleEvent(event);
     }
 }

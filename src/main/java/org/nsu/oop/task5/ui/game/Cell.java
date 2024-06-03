@@ -44,6 +44,6 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
 
     @Override
     public void publishEvent(GameEvent event) {
-        subscriber.handleEvent(event);
+        subscriber.onEvent(event);
     }
 }
