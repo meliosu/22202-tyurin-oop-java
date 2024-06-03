@@ -48,23 +48,37 @@ public class ServerSideController extends Subscriber {
         addHandler(ClientRequestEvent.class, e -> {
             ClientRequestEvent event = (ClientRequestEvent) e;
 
+            // do nothing if request is from wrong player
+            if (playerMap.get(event.clientAddress) != state.getCurrentPlayer()) {
+                return;
+            }
 
+            handleEvent(event.gameEvent);
         });
 
         addHandler(MoveEventRequest.class, e -> {
             MoveEventRequest event = (MoveEventRequest) e;
 
+            Player currentPlayer = state.getCurrentPlayer();
+
             try {
-                state.move()
-            } catch (IllegalMoveException ignored) {} // move is illegal, don't confirm
+                state.move(state.getCurrentPlayer(), event.position);
+                server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
+            } catch (IllegalMoveException | IOException ignored) {} // move is illegal, don't confirm
+
         });
 
         addHandler(WallPlacementEventRequest.class, e -> {
             WallPlacementEventRequest event = (WallPlacementEventRequest) e;
 
-            try {
+            Player currentPlayer = state.getCurrentPlayer();
+            int wallCount = state.getCurrentPlayerWallCount();
 
-            } catch (IllegalWallException ignored) {} // move is illegal, don't confirm
+            try {
+                state.placeWall(event.wallType, event.wallPosition.x, event.wallPosition.y);
+                server.broadcastEvent(new WallPlacementNotify(
+                        event.wallPosition, event.wallType, wallCount - 1, currentPlayer));
+            } catch (IllegalWallException | IOException ignored) {} // move is illegal, don't confirm
         });
     }
 }

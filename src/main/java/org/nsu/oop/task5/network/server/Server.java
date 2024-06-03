@@ -46,6 +46,14 @@ public class Server extends Publisher {
         }
     }
 
+    public void broadcastEvent(GameEvent event) throws IOException {
+        for (Pair<Socket, Connection> pair : connections) {
+            Connection conn = pair.snd;
+
+            conn.out.writeObject(event);
+        }
+    }
+
     public InetAddress getClient(int idx) {
         return connections.get(idx).fst.getInetAddress();
     }
