@@ -29,12 +29,6 @@ public class ClientSideController extends Subscriber {
     }
 
     private void addHandlers() {
-        // maybe unnecessary
-        addHandler(ServerHello.class, e -> {
-            ServerHello event = (ServerHello) e;
-            view.setPlayer(event.player);
-        });
-
         addHandler(WallPlacementNotify.class, e -> {
             WallPlacementNotify event = (WallPlacementNotify) e;
 
@@ -60,6 +54,16 @@ public class ClientSideController extends Subscriber {
             GameOverEvent event = (GameOverEvent) e;
 
             view.gameOver(event.winningPlayer);
+        });
+
+        addHandler(StartGameNotify.class, e -> {
+            view.reset();
+            view.showMainView();
+        });
+
+        // probably need to merge events (StartGameEvent / StartGameRequest)
+        addHandler(StartGameEvent.class, e -> {
+            client.sendEvent(new StartGameRequest());
         });
 
 //        addHandler(MoveEventResponse.class, e -> {

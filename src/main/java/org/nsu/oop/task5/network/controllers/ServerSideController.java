@@ -23,6 +23,7 @@ public class ServerSideController extends Subscriber {
     private final Server server;
 
     private final Map<InetAddress, Player> playerMap = new HashMap<>();
+    private int waitingClients = 0;
 
     public ServerSideController(State state, Server server) {
         this.state = state;
@@ -84,6 +85,18 @@ public class ServerSideController extends Subscriber {
                 server.broadcastEvent(new WallPlacementNotify(
                         event.wallPosition, event.wallType, wallCount - 1, currentPlayer));
             } catch (IllegalWallException | IOException ignored) {} // move is illegal, don't confirm
+        });
+
+        addHandler(StartGameRequest.class, e -> {
+            waitingClients += 1;
+
+            if (waitingClients == 2) {
+                try {
+                    server.broadcastEvent(new StartGameNotify());
+                } catch (IOException ignored) {}
+
+                waitingClients = 0;
+            }
         });
     }
 }

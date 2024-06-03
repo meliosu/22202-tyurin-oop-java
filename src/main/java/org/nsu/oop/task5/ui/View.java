@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class View extends JFrame implements Subscriber<GameEvent>, Publisher<GameEvent> {
     private static final Dimension viewSize = new Dimension(1000, 720);
-    private Player actualPlayer;
 
     private final MainView mainView;
     private final GameOver gameOver;
@@ -42,14 +41,6 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
         add(mainView);
 
         setVisible(true);
-    }
-
-    public void setPlayer(Player player) {
-        actualPlayer = player;
-    }
-
-    public Player getPlayer() {
-        return actualPlayer;
     }
 
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
