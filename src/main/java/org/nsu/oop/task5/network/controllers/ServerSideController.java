@@ -8,6 +8,7 @@ import org.nsu.oop.task5.game.exceptions.IllegalWallException;
 import org.nsu.oop.task5.network.pubsub2.Event;
 import org.nsu.oop.task5.network.pubsub2.Subscriber;
 import org.nsu.oop.task5.network.server.Server;
+import org.nsu.oop.task5.ui.menu.GameOver;
 import org.nsu.oop.task5.util.Player;
 
 import java.io.IOException;
@@ -64,6 +65,10 @@ public class ServerSideController extends Subscriber {
             try {
                 state.move(state.getCurrentPlayer(), event.position);
                 server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
+
+                if (state.winningPlayer() != null) {
+                    server.broadcastEvent(new GameOverEvent(state.winningPlayer()));
+                }
             } catch (IllegalMoveException | IOException ignored) {} // move is illegal, don't confirm
 
         });

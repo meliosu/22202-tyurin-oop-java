@@ -56,6 +56,12 @@ public class ClientSideController extends Subscriber {
             client.sendEvent(e);
         });
 
+        addHandler(GameOverEvent.class, e -> {
+            GameOverEvent event = (GameOverEvent) e;
+
+            view.gameOver(event.winningPlayer);
+        });
+
 //        addHandler(MoveEventResponse.class, e -> {
 //            MoveEventResponse response = (MoveEventResponse) e;
 //            MoveEventRequest request = response.request;
