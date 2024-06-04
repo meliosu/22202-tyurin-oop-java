@@ -16,6 +16,7 @@ public class ClientSideController extends Subscriber implements org.nsu.oop.task
         this.view = view;
         this.client = client;
 
+        System.out.println("adding");
         view.addSubscriber(this);
 
         addHandlers();
@@ -57,6 +58,8 @@ public class ClientSideController extends Subscriber implements org.nsu.oop.task
         });
 
         addHandler(StartGameNotify.class, e -> {
+            System.out.println("start game notify");
+
             view.reset();
             view.showMainView();
         });

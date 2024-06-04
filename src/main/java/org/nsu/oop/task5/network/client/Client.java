@@ -15,15 +15,22 @@ public class Client {
 
     public Client(String addr, int port) throws IOException {
         this.socket = new Socket(addr, port);
-        this.in = new ObjectInputStream(socket.getInputStream());
+
+        System.out.println("hello??");
+
         this.out = new ObjectOutputStream(socket.getOutputStream());
+
+        System.out.println("HUH??");
+
+        this.in = new ObjectInputStream(socket.getInputStream());
+        System.out.println("bred");
     }
 
     public void sendEvent(Event event) {
         try {
             out.writeObject(event);
         } catch (IOException e) {
-            System.exit(0);
+            System.err.println("sendEvent: " + e.getMessage());
         }
     }
 
@@ -31,8 +38,8 @@ public class Client {
         Event event = null;
         try {
             event = (Event) in.readObject();
-        } catch (IOException ignored) {
-            System.exit(0);
+        } catch (IOException e) {
+            System.err.println("recvEvent: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }

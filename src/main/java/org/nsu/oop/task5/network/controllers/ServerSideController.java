@@ -1,6 +1,5 @@
 package org.nsu.oop.task5.network.controllers;
 
-import com.sun.tools.javac.util.Pair;
 import org.nsu.oop.task5.controller.events.*;
 import org.nsu.oop.task5.game.State;
 import org.nsu.oop.task5.game.exceptions.IllegalMoveException;
@@ -49,9 +48,11 @@ public class ServerSideController extends Subscriber {
     private void addHandlers() {
         addHandler(ClientRequestEvent.class, e -> {
             ClientRequestEvent event = (ClientRequestEvent) e;
+            GameEvent gameEvent = event.gameEvent;
 
             // do nothing if request is from wrong player
-            if (playerMap.get(event.clientAddress) != state.getCurrentPlayer()) {
+            if ((gameEvent instanceof MoveEventRequest || gameEvent instanceof WallPlacementEventRequest )
+                    && playerMap.get(event.clientAddress) != state.getCurrentPlayer()) {
                 return;
             }
 
@@ -89,6 +90,8 @@ public class ServerSideController extends Subscriber {
 
         addHandler(StartGameRequest.class, e -> {
             waitingClients += 1;
+
+            System.out.println("waiting for game");
 
             if (waitingClients == 2) {
                 try {

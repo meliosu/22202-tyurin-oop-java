@@ -1,6 +1,5 @@
 package org.nsu.oop.task5.network.server;
 
-import com.sun.tools.javac.util.Pair;
 import org.nsu.oop.task5.controller.events.ClientRequestEvent;
 import org.nsu.oop.task5.controller.events.GameEvent;
 import org.nsu.oop.task5.network.pubsub2.Publisher;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 
 public class Server extends Publisher {
     private final ServerSocket socket;
-    private final ArrayList<Pair<Socket, Connection>> connections;
+    private final ArrayList<Connection> connections;
 
     public Server(int port) throws IOException {
         this.socket = new ServerSocket(port);
@@ -23,9 +22,12 @@ public class Server extends Publisher {
     public void acceptConnections(int numConns) throws IOException {
         while (connections.size() < numConns) {
             Socket sock = socket.accept();
+
+            System.out.println("connected!");
+
             Connection conn = new Connection(sock);
 
-            connections.add(new Pair<>(sock, conn));
+            connections.add(conn);
 
             new Thread(() -> {
                 while (true) {
@@ -34,27 +36,25 @@ public class Server extends Publisher {
                     try {
                         event = (GameEvent) conn.in.readObject();
                     } catch (IOException e) {
-                        break;
+                        System.err.println("worker in server: " + e.getMessage());
                     } catch (ClassNotFoundException e) {
                         System.err.println("class not found!");
-                        System.exit(0);
+                        System.exit(1);
                     }
 
                     publishEvent(new ClientRequestEvent(event, sock.getInetAddress()));
                 }
-            });
+            }).start();
         }
     }
 
     public void broadcastEvent(GameEvent event) throws IOException {
-        for (Pair<Socket, Connection> pair : connections) {
-            Connection conn = pair.snd;
-
+        for (Connection conn : connections) {
             conn.out.writeObject(event);
         }
     }
 
     public InetAddress getClient(int idx) {
-        return connections.get(idx).fst.getInetAddress();
+        return connections.get(idx).socket.getInetAddress();
     }
 }
