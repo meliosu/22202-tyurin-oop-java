@@ -52,8 +52,10 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     }
 
     public void gameOver(Player winningPlayer) {
-        mainView.setVisible(false);
         gameOver.setWinningPlayer(winningPlayer);
+
+        mainView.setVisible(false);
+        menu.setVisible(false);
         gameOver.setVisible(true);
     }
 
@@ -88,8 +90,6 @@ public class View extends JFrame implements Subscriber<GameEvent>, Publisher<Gam
     @Override
     public void onEvent(GameEvent event) {
         if (event instanceof StartGameEvent) {
-//            menu.setVisible(false);
-//            mainView.setVisible(true);
             publishEvent(event);
         }
     }

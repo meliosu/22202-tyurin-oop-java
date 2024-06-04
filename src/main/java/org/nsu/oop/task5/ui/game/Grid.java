@@ -34,6 +34,10 @@ public class Grid extends JPanel {
         this.size = size;
     }
 
+    public Dimension getCellSize() {
+        return cells[0][0].getSize();
+    }
+
     public void addSubscriber(Subscriber<GameEvent> subscriber) {
         for (Cell[] cell : cells) {
             for (int y = 0; y < cells.length; y++) {

@@ -99,10 +99,6 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
         this.subscriber = subscriber;
     }
 
-    public void highlightCells(ArrayList<Position> cells) {
-        grid.highlightCells(cells);
-    }
-
     @Override
     public void onEvent(GameEvent e) {
         if (e instanceof ClickEvent) {
@@ -113,10 +109,16 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
 
             GameEvent passedEvent;
 
+            Dimension cellSize = grid.getCellSize();
+
             if (mouseEvent.getX() < clickThreshold) {
                 passedEvent = new WallPlacementRequest(new Position(pos.x, pos.y - 1), WallType.Horizontal);
             } else if (mouseEvent.getY() < clickThreshold) {
                 passedEvent = new WallPlacementRequest(new Position(pos.x - 1, pos.y), WallType.Vertical);
+            } else if (cellSize.height - mouseEvent.getY() < clickThreshold) {
+                passedEvent = new WallPlacementRequest(new Position(pos.x, pos.y), WallType.Vertical);
+            } else if (cellSize.width - mouseEvent.getX() < clickThreshold) {
+                passedEvent = new WallPlacementRequest(new Position(pos.x, pos.y), WallType.Horizontal);
             } else {
                 passedEvent = new MoveRequest(pos);
             }
