@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.ui.game;
 
-import org.nsu.oop.task5.events.ui.ClickEvent;
 import org.nsu.oop.task5.events.GameEvent;
+import org.nsu.oop.task5.events.ui.ClickEvent;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
 import org.nsu.oop.task5.util.Position;
@@ -28,10 +28,6 @@ public class Cell extends JPanel implements Publisher<GameEvent> {
                 publishEvent(new ClickEvent(position, e));
             }
         });
-    }
-
-    public void highlight() {
-        setBackground(highlightColor);
     }
 
     public void dehighlight() {

@@ -1,9 +1,9 @@
 package org.nsu.oop.task5.ui.game;
 
-import org.nsu.oop.task5.events.ui.ClickEvent;
 import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.events.online.MoveRequest;
 import org.nsu.oop.task5.events.online.WallPlacementRequest;
+import org.nsu.oop.task5.events.ui.ClickEvent;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
 import org.nsu.oop.task5.util.Position;

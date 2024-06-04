@@ -1,9 +1,9 @@
-package org.nsu.oop.task5.network.pubsub2;
+package org.nsu.oop.task5.network.observe;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Subscriber {
+public abstract class Observer {
     private final Map<Class<?>, Handler> handlers = new HashMap<>();
 
     public void handleEvent(Event event) {

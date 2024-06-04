@@ -1,5 +1,6 @@
-package org.nsu.oop.task5.network.client;
+package org.nsu.oop.task5.network.apps;
 
+import org.nsu.oop.task5.network.client.Client;
 import org.nsu.oop.task5.network.controllers.ClientSideController;
 import org.nsu.oop.task5.ui.View;
 

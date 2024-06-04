@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.ui.menu;
 
-import org.nsu.oop.task5.events.ui.BackToMenuEvent;
 import org.nsu.oop.task5.events.GameEvent;
+import org.nsu.oop.task5.events.ui.BackToMenuEvent;
 import org.nsu.oop.task5.pubsub.Subscriber;
 import org.nsu.oop.task5.util.Player;
 

@@ -1,13 +1,14 @@
 package org.nsu.oop.task5.network.server;
 
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.events.online.ClientDisconnectedEvent;
 import org.nsu.oop.task5.events.online.ClientRequest;
-import org.nsu.oop.task5.events.GameEvent;
-import org.nsu.oop.task5.network.pubsub2.Publisher;
+import org.nsu.oop.task5.network.observe.Observable;
+import org.nsu.oop.task5.network.util.Connection;
 
 import java.io.IOException;
 
-public class ServerConnectionHandler extends Publisher {
+public class ServerConnectionHandler extends Observable {
     private final Thread thread;
 
     public ServerConnectionHandler(Connection connection) {

@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.network.client;
 
-import org.nsu.oop.task5.network.pubsub2.Event;
-import org.nsu.oop.task5.network.server.Connection;
+import org.nsu.oop.task5.network.observe.Event;
+import org.nsu.oop.task5.network.util.Connection;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

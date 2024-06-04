@@ -1,17 +1,20 @@
 package org.nsu.oop.task5.network.controllers;
 
-import org.nsu.oop.task5.events.*;
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.events.online.*;
 import org.nsu.oop.task5.game.State;
-import org.nsu.oop.task5.game.exceptions.*;
-import org.nsu.oop.task5.network.pubsub2.Subscriber;
-import org.nsu.oop.task5.network.server.*;
+import org.nsu.oop.task5.game.exceptions.IllegalMoveException;
+import org.nsu.oop.task5.game.exceptions.IllegalWallException;
+import org.nsu.oop.task5.network.observe.Observer;
+import org.nsu.oop.task5.network.server.Server;
+import org.nsu.oop.task5.network.server.ServerConnectionHandler;
+import org.nsu.oop.task5.network.util.Connection;
 import org.nsu.oop.task5.util.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerSideController extends Subscriber {
+public class ServerSideController extends Observer {
     private final State state;
     private final Server server;
 
@@ -23,7 +26,7 @@ public class ServerSideController extends Subscriber {
         this.server = server;
 
         addHandlers();
-        server.addSubscriber(this);
+        server.addObserver(this);
     }
 
     public void start() {
@@ -36,8 +39,8 @@ public class ServerSideController extends Subscriber {
         ServerConnectionHandler firstClientHandler = new ServerConnectionHandler(firstClient);
         ServerConnectionHandler secondClientHandler = new ServerConnectionHandler(secondClient);
 
-        firstClientHandler.addSubscriber(this);
-        secondClientHandler.addSubscriber(this);
+        firstClientHandler.addObserver(this);
+        secondClientHandler.addObserver(this);
 
         firstClientHandler.start();
         secondClientHandler.start();
@@ -62,7 +65,7 @@ public class ServerSideController extends Subscriber {
             playerMap.put(newConnection, player);
 
             ServerConnectionHandler newHandler = new ServerConnectionHandler(newConnection);
-            newHandler.addSubscriber(this);
+            newHandler.addObserver(this);
             newHandler.start();
         });
 

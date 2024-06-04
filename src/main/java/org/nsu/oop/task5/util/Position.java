@@ -3,8 +3,8 @@ package org.nsu.oop.task5.util;
 import java.io.Serializable;
 
 public class Position implements Serializable {
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
 
     public Position(int x, int y) {
         this.x = x;

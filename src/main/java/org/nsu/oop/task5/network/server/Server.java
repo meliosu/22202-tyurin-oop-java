@@ -1,14 +1,15 @@
 package org.nsu.oop.task5.network.server;
 
-import org.nsu.oop.task5.network.pubsub2.Event;
-import org.nsu.oop.task5.network.pubsub2.Publisher;
+import org.nsu.oop.task5.network.observe.Event;
+import org.nsu.oop.task5.network.observe.Observable;
+import org.nsu.oop.task5.network.util.Connection;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Server extends Publisher {
+public class Server extends Observable {
     private final ServerSocket socket;
     private final ArrayList<Connection> connections;
 

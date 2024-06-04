@@ -1,6 +1,6 @@
 package org.nsu.oop.task5.events;
 
-import org.nsu.oop.task5.network.pubsub2.Event;
+import org.nsu.oop.task5.network.observe.Event;
 
 import java.io.Serializable;
 

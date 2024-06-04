@@ -1,4 +1,4 @@
-package org.nsu.oop.task5.network.server;
+package org.nsu.oop.task5.network.util;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

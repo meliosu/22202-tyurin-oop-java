@@ -1,7 +1,8 @@
-package org.nsu.oop.task5.network.server;
+package org.nsu.oop.task5.network.apps;
 
 import org.nsu.oop.task5.game.State;
 import org.nsu.oop.task5.network.controllers.ServerSideController;
+import org.nsu.oop.task5.network.server.Server;
 
 import java.io.IOException;
 

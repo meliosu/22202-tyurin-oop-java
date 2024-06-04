@@ -1,5 +1,4 @@
-package org.nsu.oop.task5.network.pubsub2;
-
+package org.nsu.oop.task5.network.observe;
 
 public interface Handler {
     void handle(Event event);

@@ -4,16 +4,15 @@ import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.events.ui.StartGameEvent;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
-import org.nsu.oop.task5.util.Player;
-import org.nsu.oop.task5.util.Position;
 import org.nsu.oop.task5.ui.game.MainView;
 import org.nsu.oop.task5.ui.game.Wall;
 import org.nsu.oop.task5.ui.menu.GameMenu;
 import org.nsu.oop.task5.ui.menu.GameOver;
+import org.nsu.oop.task5.util.Player;
+import org.nsu.oop.task5.util.Position;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class View extends JFrame implements Subscriber<GameEvent>, Publisher<GameEvent> {
     private static final Dimension viewSize = new Dimension(1000, 720);

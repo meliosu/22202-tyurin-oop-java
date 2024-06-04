@@ -1,12 +1,12 @@
 package org.nsu.oop.task5.network.client;
 
 import org.nsu.oop.task5.events.GameEvent;
-import org.nsu.oop.task5.network.pubsub2.Publisher;
-import org.nsu.oop.task5.network.server.Connection;
+import org.nsu.oop.task5.network.observe.Observable;
+import org.nsu.oop.task5.network.util.Connection;
 
 import java.io.IOException;
 
-public class ClientConnectionHandler extends Publisher {
+public class ClientConnectionHandler extends Observable {
     private final Thread thread;
 
     public ClientConnectionHandler(Connection connection) {

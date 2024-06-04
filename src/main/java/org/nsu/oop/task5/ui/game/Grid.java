@@ -54,13 +54,6 @@ public class Grid extends JPanel {
         }
     }
 
-    public void highlightCells(ArrayList<Position> positions) {
-        clearHighlights();
-        for (Position pos : positions) {
-            cells[pos.x][pos.y].highlight();
-        }
-    }
-
     public void drawCircle(Position position, Color color, Graphics g) {
         Cell cell = cells[position.x][position.y];
         g.setColor(color);
