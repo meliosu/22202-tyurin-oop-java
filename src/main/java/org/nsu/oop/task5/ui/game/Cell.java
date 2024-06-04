@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.ui.game;
 
-import org.nsu.oop.task5.controller.events.ClickEvent;
-import org.nsu.oop.task5.controller.events.GameEvent;
+import org.nsu.oop.task5.events.ui.ClickEvent;
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
 import org.nsu.oop.task5.util.Position;

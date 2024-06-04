@@ -1,16 +1,13 @@
 package org.nsu.oop.task5.network.controllers;
 
-import org.nsu.oop.task5.controller.events.*;
+import org.nsu.oop.task5.events.*;
+import org.nsu.oop.task5.events.online.*;
 import org.nsu.oop.task5.game.State;
-import org.nsu.oop.task5.game.exceptions.IllegalMoveException;
-import org.nsu.oop.task5.game.exceptions.IllegalWallException;
+import org.nsu.oop.task5.game.exceptions.*;
 import org.nsu.oop.task5.network.pubsub2.Subscriber;
-import org.nsu.oop.task5.network.server.Connection;
-import org.nsu.oop.task5.network.server.ConnectionHandler;
-import org.nsu.oop.task5.network.server.Server;
+import org.nsu.oop.task5.network.server.*;
 import org.nsu.oop.task5.util.Player;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,20 +22,19 @@ public class ServerSideController extends Subscriber {
         this.state = state;
         this.server = server;
 
-        server.addSubscriber(this);
-
         addHandlers();
+        server.addSubscriber(this);
     }
 
-    public void start() throws IOException {
+    public void start() {
         Connection firstClient = server.acceptConnection();
         Connection secondClient = server.acceptConnection();
 
         playerMap.put(firstClient, Player.First);
         playerMap.put(secondClient, Player.Second);
 
-        ConnectionHandler firstClientHandler = new ConnectionHandler(firstClient);
-        ConnectionHandler secondClientHandler = new ConnectionHandler(secondClient);
+        ServerConnectionHandler firstClientHandler = new ServerConnectionHandler(firstClient);
+        ServerConnectionHandler secondClientHandler = new ServerConnectionHandler(secondClient);
 
         firstClientHandler.addSubscriber(this);
         secondClientHandler.addSubscriber(this);
@@ -51,13 +47,32 @@ public class ServerSideController extends Subscriber {
     }
 
     private void addHandlers() {
-        addHandler(ClientRequestEvent.class, e -> {
-            ClientRequestEvent event = (ClientRequestEvent) e;
-            GameEvent gameEvent = event.gameEvent;
+        addHandler(ClientDisconnectedEvent.class, e -> {
+            ClientDisconnectedEvent event = (ClientDisconnectedEvent) e;
 
-            // do nothing if request is from wrong player
-            if ((gameEvent instanceof MoveEventRequest || gameEvent instanceof WallPlacementEventRequest )
-                    && playerMap.get(event.clientConnection) != state.getCurrentPlayer()) {
+            Player player = playerMap.get(event.connection);
+            playerMap.remove(event.connection);
+
+            server.broadcastEvent(new GameOverNotify(player == Player.First ? Player.Second : Player.First));
+
+            state.reset();
+            ready.clear();
+
+            Connection newConnection = server.acceptConnection();
+            playerMap.put(newConnection, player);
+
+            ServerConnectionHandler newHandler = new ServerConnectionHandler(newConnection);
+            newHandler.addSubscriber(this);
+            newHandler.start();
+        });
+
+        addHandler(ClientRequest.class, e -> {
+            ClientRequest event = (ClientRequest) e;
+            GameEvent gameEvent = event.gameEvent;
+            Player sourcePlayer = playerMap.get(event.clientConnection);
+
+            if ((gameEvent instanceof MoveRequest || gameEvent instanceof WallPlacementRequest)
+                    && sourcePlayer != state.getCurrentPlayer()) {
                 return;
             }
 
@@ -70,31 +85,28 @@ public class ServerSideController extends Subscriber {
             handleEvent(event.gameEvent);
         });
 
-        addHandler(MoveEventRequest.class, e -> {
-            System.out.println("handling move request");
-
-            MoveEventRequest event = (MoveEventRequest) e;
-
+        addHandler(MoveRequest.class, e -> {
+            MoveRequest event = (MoveRequest) e;
             Player currentPlayer = state.getCurrentPlayer();
 
             try {
                 state.move(state.getCurrentPlayer(), event.position);
+            } catch (IllegalMoveException exception) {
+                System.out.println("illegal move");
+                return;
+            }
 
-                if (state.winningPlayer() != null) {
-                    server.broadcastEvent(new GameOverEvent(state.winningPlayer()));
-                    state.reset();
-                } else {
-                    server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
-                }
-            } catch (IOException exception) {
-                System.out.println("io: " + exception.getMessage());
-            } catch (IllegalMoveException ignored) {
-                System.out.println("illegal");
-            } // move is illegal, don't confirm
+            Player winningPlayer = state.winningPlayer();
+            if (winningPlayer != null) {
+                server.broadcastEvent(new GameOverNotify(winningPlayer));
+                state.reset();
+            } else {
+                server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
+            }
         });
 
-        addHandler(WallPlacementEventRequest.class, e -> {
-            WallPlacementEventRequest event = (WallPlacementEventRequest) e;
+        addHandler(WallPlacementRequest.class, e -> {
+            WallPlacementRequest event = (WallPlacementRequest) e;
 
             Player currentPlayer = state.getCurrentPlayer();
             int wallCount = state.getCurrentPlayerWallCount();
@@ -103,15 +115,15 @@ public class ServerSideController extends Subscriber {
                 state.placeWall(event.wallType, event.wallPosition.x, event.wallPosition.y);
                 server.broadcastEvent(new WallPlacementNotify(
                         event.wallPosition, event.wallType, wallCount - 1, currentPlayer));
-            } catch (IllegalWallException | IOException ignored) {} // move is illegal, don't confirm
+            } catch (IllegalWallException exception) {
+                System.out.println("illegal wall");
+            }
         });
 
         addHandler(StartGameRequest.class, e -> {
             if (ready.size() == 2) {
-                try {
-                    ready.clear();
-                    server.broadcastEvent(new StartGameNotify());
-                } catch (IOException ignored) {}
+                server.broadcastEvent(new StartGameNotify());
+                ready.clear();
             }
         });
     }

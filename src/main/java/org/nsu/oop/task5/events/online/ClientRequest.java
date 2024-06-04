@@ -1,15 +1,13 @@
-package org.nsu.oop.task5.controller.events;
+package org.nsu.oop.task5.events.online;
 
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.network.server.Connection;
 
-import java.net.InetAddress;
-import java.net.Socket;
-
-public class ClientRequestEvent extends GameEvent {
+public class ClientRequest extends GameEvent {
     public final GameEvent gameEvent;
     public final Connection clientConnection;
 
-    public ClientRequestEvent(GameEvent event, Connection connection) {
+    public ClientRequest(GameEvent event, Connection connection) {
         this.gameEvent = event;
         this.clientConnection = connection;
     }

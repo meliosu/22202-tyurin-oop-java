@@ -1,49 +1,35 @@
 package org.nsu.oop.task5.network.client;
 
 import org.nsu.oop.task5.network.pubsub2.Event;
+import org.nsu.oop.task5.network.server.Connection;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class Client {
-    private final Socket socket;
+    private final InetSocketAddress serverAddress;
 
-    private final ObjectInputStream in;
-    private final ObjectOutputStream out;
+    private Connection connection;
 
-    public Client(String addr, int port) throws IOException {
-        this.socket = new Socket(addr, port);
+    public Client(String addr, int port) {
+        this.serverAddress = new InetSocketAddress(addr, port);
+    }
 
-        System.out.println("hello??");
-
-        this.out = new ObjectOutputStream(socket.getOutputStream());
-
-        System.out.println("HUH??");
-
-        this.in = new ObjectInputStream(socket.getInputStream());
-        System.out.println("bred");
+    public void connect() throws IOException {
+        Socket socket = new Socket(serverAddress.getHostName(), serverAddress.getPort());
+        this.connection = new Connection(socket);
     }
 
     public void sendEvent(Event event) {
         try {
-            out.writeObject(event);
+            connection.out.writeObject(event);
         } catch (IOException e) {
-            System.err.println("sendEvent: " + e.getMessage());
+            System.err.println("error sending event: " + e.getMessage());
         }
     }
 
-    public Event recvEvent() {
-        Event event = null;
-        try {
-            event = (Event) in.readObject();
-        } catch (IOException e) {
-            System.err.println("recvEvent: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return event;
+    public Connection getConnection() {
+        return connection;
     }
 }

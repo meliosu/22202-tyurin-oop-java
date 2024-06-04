@@ -1,24 +1,24 @@
 package org.nsu.oop.task5.network.server;
 
-import org.nsu.oop.task5.controller.events.ClientRequestEvent;
-import org.nsu.oop.task5.controller.events.GameEvent;
+import org.nsu.oop.task5.events.online.ClientDisconnectedEvent;
+import org.nsu.oop.task5.events.online.ClientRequest;
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.network.pubsub2.Publisher;
 
 import java.io.IOException;
+import java.net.SocketException;
 
-public class ConnectionHandler extends Publisher {
-    private final Connection connection;
+public class ServerConnectionHandler extends Publisher {
     private final Thread thread;
 
-    public ConnectionHandler(Connection connection) {
-        this.connection = connection;
+    public ServerConnectionHandler(Connection connection) {
         this.thread = new Thread(() -> {
             while (true) {
                 try {
                     GameEvent event = (GameEvent) connection.in.readObject();
-                    publishEvent(new ClientRequestEvent(event, connection));
+                    publishEvent(new ClientRequest(event, connection));
                 } catch (IOException e) {
-                    System.err.println("e: " + e.getMessage());
+                    publishEvent(new ClientDisconnectedEvent(connection));
                     break;
                 } catch (ClassNotFoundException e) {
                     System.err.println("class not found!");

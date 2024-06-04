@@ -1,9 +1,9 @@
 package org.nsu.oop.task5.ui.game;
 
-import org.nsu.oop.task5.controller.events.ClickEvent;
-import org.nsu.oop.task5.controller.events.GameEvent;
-import org.nsu.oop.task5.controller.events.MoveEventRequest;
-import org.nsu.oop.task5.controller.events.WallPlacementEventRequest;
+import org.nsu.oop.task5.events.ui.ClickEvent;
+import org.nsu.oop.task5.events.GameEvent;
+import org.nsu.oop.task5.events.online.MoveRequest;
+import org.nsu.oop.task5.events.online.WallPlacementRequest;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
 import org.nsu.oop.task5.util.Position;
@@ -114,11 +114,11 @@ public class PlayingField extends JPanel implements Subscriber<GameEvent>, Publi
             GameEvent passedEvent;
 
             if (mouseEvent.getX() < clickThreshold) {
-                passedEvent = new WallPlacementEventRequest(new Position(pos.x, pos.y - 1), WallType.Horizontal);
+                passedEvent = new WallPlacementRequest(new Position(pos.x, pos.y - 1), WallType.Horizontal);
             } else if (mouseEvent.getY() < clickThreshold) {
-                passedEvent = new WallPlacementEventRequest(new Position(pos.x - 1, pos.y), WallType.Vertical);
+                passedEvent = new WallPlacementRequest(new Position(pos.x - 1, pos.y), WallType.Vertical);
             } else {
-                passedEvent = new MoveEventRequest(pos);
+                passedEvent = new MoveRequest(pos);
             }
 
             publishEvent(passedEvent);

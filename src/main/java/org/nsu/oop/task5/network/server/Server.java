@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.network.server;
 
-import org.nsu.oop.task5.controller.events.ClientRequestEvent;
-import org.nsu.oop.task5.controller.events.GameEvent;
+import org.nsu.oop.task5.events.GameEvent;
+import org.nsu.oop.task5.network.pubsub2.Event;
 import org.nsu.oop.task5.network.pubsub2.Publisher;
 
 import java.io.IOException;
@@ -18,16 +18,22 @@ public class Server extends Publisher {
         this.connections = new ArrayList<>();
     }
 
-    public Connection acceptConnection() throws IOException {
-        Socket clientSocket = socket.accept();
-        Connection connection = new Connection(clientSocket);
-        connections.add(connection);
-        return connection;
+    public Connection acceptConnection() {
+        while (true) {
+            try {
+                Socket clientSocket = socket.accept();
+                Connection connection = new Connection(clientSocket);
+                connections.add(connection);
+                return connection;
+            } catch (IOException ignored) {}
+        }
     }
 
-    public void broadcastEvent(GameEvent event) throws IOException {
+    public void broadcastEvent(Event event) {
         for (Connection conn : connections) {
-            conn.out.writeObject(event);
+            try {
+                conn.out.writeObject(event);
+            } catch (IOException ignored) {}
         }
     }
 }

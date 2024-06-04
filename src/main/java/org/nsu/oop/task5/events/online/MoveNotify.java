@@ -1,5 +1,6 @@
-package org.nsu.oop.task5.controller.events;
+package org.nsu.oop.task5.events.online;
 
+import org.nsu.oop.task5.events.GameEvent;
 import org.nsu.oop.task5.util.Player;
 import org.nsu.oop.task5.util.Position;
 

@@ -1,7 +1,7 @@
 package org.nsu.oop.task5.ui.menu;
 
-import org.nsu.oop.task5.controller.events.GameEvent;
-import org.nsu.oop.task5.controller.events.StartGameEvent;
+import org.nsu.oop.task5.events.GameEvent;
+import org.nsu.oop.task5.events.ui.StartGameEvent;
 import org.nsu.oop.task5.pubsub.Publisher;
 import org.nsu.oop.task5.pubsub.Subscriber;
 

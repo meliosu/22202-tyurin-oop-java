@@ -1,7 +1,5 @@
 package org.nsu.oop.task5.network.pubsub2;
 
-import org.nsu.oop.task5.controller.events.GameEvent;
-
 import java.util.HashMap;
 import java.util.Map;
 
