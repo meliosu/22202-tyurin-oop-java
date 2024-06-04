@@ -4,16 +4,13 @@ import org.nsu.oop.task5.controller.events.*;
 import org.nsu.oop.task5.game.State;
 import org.nsu.oop.task5.game.exceptions.IllegalMoveException;
 import org.nsu.oop.task5.game.exceptions.IllegalWallException;
-import org.nsu.oop.task5.network.pubsub2.Event;
 import org.nsu.oop.task5.network.pubsub2.Subscriber;
+import org.nsu.oop.task5.network.server.Connection;
+import org.nsu.oop.task5.network.server.ConnectionHandler;
 import org.nsu.oop.task5.network.server.Server;
-import org.nsu.oop.task5.ui.menu.GameOver;
 import org.nsu.oop.task5.util.Player;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,8 +18,8 @@ public class ServerSideController extends Subscriber {
     private final State state;
     private final Server server;
 
-    private final Map<Socket, Player> playerMap = new HashMap<>();
-    private int waitingClients = 0;
+    private final Map<Connection, Player> playerMap = new HashMap<>();
+    private final Map<Connection, Boolean> ready = new HashMap<>();
 
     public ServerSideController(State state, Server server) {
         this.state = state;
@@ -34,15 +31,23 @@ public class ServerSideController extends Subscriber {
     }
 
     public void start() throws IOException {
-        server.acceptConnections(2);
-
-        Socket firstClient = server.getClient(0);
-        Socket secondClient = server.getClient(1);
+        Connection firstClient = server.acceptConnection();
+        Connection secondClient = server.acceptConnection();
 
         playerMap.put(firstClient, Player.First);
         playerMap.put(secondClient, Player.Second);
 
-        while (true) {}
+        ConnectionHandler firstClientHandler = new ConnectionHandler(firstClient);
+        ConnectionHandler secondClientHandler = new ConnectionHandler(secondClient);
+
+        firstClientHandler.addSubscriber(this);
+        secondClientHandler.addSubscriber(this);
+
+        firstClientHandler.start();
+        secondClientHandler.start();
+
+        firstClientHandler.join();
+        secondClientHandler.join();
     }
 
     private void addHandlers() {
@@ -52,8 +57,14 @@ public class ServerSideController extends Subscriber {
 
             // do nothing if request is from wrong player
             if ((gameEvent instanceof MoveEventRequest || gameEvent instanceof WallPlacementEventRequest )
-                    && playerMap.get(event.clientSocket) != state.getCurrentPlayer()) {
+                    && playerMap.get(event.clientConnection) != state.getCurrentPlayer()) {
                 return;
+            }
+
+            if (gameEvent instanceof StartGameRequest) {
+                if (!ready.containsKey(event.clientConnection)) {
+                    ready.put(event.clientConnection, true);
+                }
             }
 
             handleEvent(event.gameEvent);
@@ -68,10 +79,12 @@ public class ServerSideController extends Subscriber {
 
             try {
                 state.move(state.getCurrentPlayer(), event.position);
-                server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
 
                 if (state.winningPlayer() != null) {
                     server.broadcastEvent(new GameOverEvent(state.winningPlayer()));
+                    state.reset();
+                } else {
+                    server.broadcastEvent(new MoveNotify(event.position, currentPlayer));
                 }
             } catch (IOException exception) {
                 System.out.println("io: " + exception.getMessage());
@@ -94,16 +107,11 @@ public class ServerSideController extends Subscriber {
         });
 
         addHandler(StartGameRequest.class, e -> {
-            waitingClients += 1;
-
-            System.out.println("waiting for game");
-
-            if (waitingClients == 2) {
+            if (ready.size() == 2) {
                 try {
+                    ready.clear();
                     server.broadcastEvent(new StartGameNotify());
                 } catch (IOException ignored) {}
-
-                waitingClients = 0;
             }
         });
     }

@@ -1,40 +1,42 @@
 package org.nsu.oop.task5.network.server;
 
-import org.nsu.oop.task5.network.pubsub2.Event;
+import org.nsu.oop.task5.controller.events.ClientRequestEvent;
+import org.nsu.oop.task5.controller.events.GameEvent;
 import org.nsu.oop.task5.network.pubsub2.Publisher;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 public class ConnectionHandler extends Publisher {
-    private final Socket socket;
-    private final ObjectInputStream in;
-    private final ObjectOutputStream out;
+    private final Connection connection;
+    private final Thread thread;
 
-    public ConnectionHandler(Socket socket) throws IOException {
-        this.socket = socket;
-        in = new ObjectInputStream(socket.getInputStream());
-        out = new ObjectOutputStream(socket.getOutputStream());
-    }
-
-    public void run() {
-        new Thread(() -> {
+    public ConnectionHandler(Connection connection) {
+        this.connection = connection;
+        this.thread = new Thread(() -> {
             while (true) {
-                Event event;
-
                 try {
-                    event = (Event) in.readObject();
+                    GameEvent event = (GameEvent) connection.in.readObject();
+                    publishEvent(new ClientRequestEvent(event, connection));
                 } catch (IOException e) {
+                    System.err.println("e: " + e.getMessage());
                     break;
                 } catch (ClassNotFoundException e) {
-                    System.err.println("class not found");
-                    break;
+                    System.err.println("class not found!");
+                    System.exit(1);
                 }
-
-                publishEvent(event);
             }
         });
+    }
+
+    public void start() {
+        thread.start();
+    }
+
+    public void join() {
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            System.err.println("interrupt");
+        }
     }
 }

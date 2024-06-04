@@ -30,6 +30,10 @@ public class ClientSideController extends Subscriber implements org.nsu.oop.task
     }
 
     private void addHandlers() {
+        addHandler(BackToMenuEvent.class, e -> {
+            view.showMenu();
+        });
+
         addHandler(WallPlacementNotify.class, e -> {
             WallPlacementNotify event = (WallPlacementNotify) e;
 
@@ -50,6 +54,8 @@ public class ClientSideController extends Subscriber implements org.nsu.oop.task
         });
 
         addHandler(WallPlacementEventRequest.class, e -> {
+            System.out.println("wall request");
+
             client.sendEvent(e);
         });
 
