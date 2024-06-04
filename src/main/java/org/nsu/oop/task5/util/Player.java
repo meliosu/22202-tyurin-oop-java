@@ -1,6 +1,8 @@
 package org.nsu.oop.task5.util;
 
-public enum Player {
+import java.io.Serializable;
+
+public enum Player implements Serializable {
     First,
     Second;
 

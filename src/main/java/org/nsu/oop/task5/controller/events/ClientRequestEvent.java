@@ -1,13 +1,14 @@
 package org.nsu.oop.task5.controller.events;
 
 import java.net.InetAddress;
+import java.net.Socket;
 
 public class ClientRequestEvent extends GameEvent {
     public final GameEvent gameEvent;
-    public final InetAddress clientAddress;
+    public final Socket clientSocket;
 
-    public ClientRequestEvent(GameEvent event, InetAddress address) {
+    public ClientRequestEvent(GameEvent event, Socket socket) {
         this.gameEvent = event;
-        this.clientAddress = address;
+        this.clientSocket = socket;
     }
 }

@@ -21,7 +21,7 @@ public class ServerSideController extends Subscriber {
     private final State state;
     private final Server server;
 
-    private final Map<InetAddress, Player> playerMap = new HashMap<>();
+    private final Map<Socket, Player> playerMap = new HashMap<>();
     private int waitingClients = 0;
 
     public ServerSideController(State state, Server server) {
@@ -36,8 +36,8 @@ public class ServerSideController extends Subscriber {
     public void start() throws IOException {
         server.acceptConnections(2);
 
-        InetAddress firstClient = server.getClient(0);
-        InetAddress secondClient = server.getClient(1);
+        Socket firstClient = server.getClient(0);
+        Socket secondClient = server.getClient(1);
 
         playerMap.put(firstClient, Player.First);
         playerMap.put(secondClient, Player.Second);
@@ -52,7 +52,7 @@ public class ServerSideController extends Subscriber {
 
             // do nothing if request is from wrong player
             if ((gameEvent instanceof MoveEventRequest || gameEvent instanceof WallPlacementEventRequest )
-                    && playerMap.get(event.clientAddress) != state.getCurrentPlayer()) {
+                    && playerMap.get(event.clientSocket) != state.getCurrentPlayer()) {
                 return;
             }
 
@@ -60,6 +60,8 @@ public class ServerSideController extends Subscriber {
         });
 
         addHandler(MoveEventRequest.class, e -> {
+            System.out.println("handling move request");
+
             MoveEventRequest event = (MoveEventRequest) e;
 
             Player currentPlayer = state.getCurrentPlayer();
@@ -71,8 +73,11 @@ public class ServerSideController extends Subscriber {
                 if (state.winningPlayer() != null) {
                     server.broadcastEvent(new GameOverEvent(state.winningPlayer()));
                 }
-            } catch (IllegalMoveException | IOException ignored) {} // move is illegal, don't confirm
-
+            } catch (IOException exception) {
+                System.out.println("io: " + exception.getMessage());
+            } catch (IllegalMoveException ignored) {
+                System.out.println("illegal");
+            } // move is illegal, don't confirm
         });
 
         addHandler(WallPlacementEventRequest.class, e -> {

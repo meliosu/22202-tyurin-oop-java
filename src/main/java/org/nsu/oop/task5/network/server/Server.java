@@ -42,7 +42,7 @@ public class Server extends Publisher {
                         System.exit(1);
                     }
 
-                    publishEvent(new ClientRequestEvent(event, sock.getInetAddress()));
+                    publishEvent(new ClientRequestEvent(event, sock));
                 }
             }).start();
         }
@@ -54,7 +54,7 @@ public class Server extends Publisher {
         }
     }
 
-    public InetAddress getClient(int idx) {
-        return connections.get(idx).socket.getInetAddress();
+    public Socket getClient(int idx) {
+        return connections.get(idx).socket;
     }
 }

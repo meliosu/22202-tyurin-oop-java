@@ -1,6 +1,8 @@
 package org.nsu.oop.task5.util;
 
-public enum WallType {
+import java.io.Serializable;
+
+public enum WallType implements Serializable {
     Horizontal,
     Vertical,
 }

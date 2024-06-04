@@ -44,6 +44,8 @@ public class ClientSideController extends Subscriber implements org.nsu.oop.task
         });
 
         addHandler(MoveEventRequest.class, e -> {
+            System.out.println("move request");
+
             client.sendEvent(e);
         });
 
